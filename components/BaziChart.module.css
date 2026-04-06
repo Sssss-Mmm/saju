@@ -1,0 +1,163 @@
+.whiteCardContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #888;
+  margin: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 60px repeat(4, 1fr);
+  row-gap: 20px;
+  column-gap: 12px;
+  align-items: center;
+  min-width: 320px;
+}
+
+.rowLabel {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+  padding-right: 12px;
+  font-weight: 500;
+}
+
+.colHeader {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+}
+
+.darkPill {
+  background-color: #3f4c63;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  max-width: 80px;
+  box-sizing: border-box;
+}
+
+.elementBox {
+  border-radius: 12px;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 80px;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.charGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.koChar {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.hanjaChar {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #e53e3e;
+}
+
+.elementText {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Element Colors */
+.wood {
+  background-color: #bdf2cc;
+}
+.wood .elementText { color: #2f855a; }
+
+.fire {
+  background-color: #fed7d7;
+}
+.fire .elementText { color: #c53030; }
+
+.earth {
+  background-color: #fef08a;
+}
+.earth .elementText { color: #b45309; }
+
+.metal {
+  background-color: #edf2f7;
+}
+.metal .elementText { color: #718096; }
+
+.water {
+  background-color: #bee3f8;
+}
+.water .elementText { color: #2b6cb0; }
+
+.twelveGodsSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+}
+
+.twelveGodsLabel {
+  font-weight: 700;
+  color: #333;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.blueTag {
+  background-color: #ebf8ff;
+  color: #3182ce;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}

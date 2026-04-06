@@ -1,0 +1,104 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chatBubbleContainer {
+  background-color: #f8fbff;
+  border-radius: 16px;
+  border-left: 4px solid #3182ce;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.chatBubble {
+  color: #2d3748;
+}
+
+.chatHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  font-size: 1.2rem;
+}
+
+.sender {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #1a202c;
+}
+
+.chatContent {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4a5568;
+}
+
+.chatContent p {
+  margin-bottom: 16px;
+  word-break: keep-all;
+}
+
+.chatContent p:last-child {
+  margin-bottom: 0;
+}
+
+.chatContent strong {
+  color: #2b6cb0;
+  font-weight: 800;
+  background: rgba(43, 108, 176, 0.05);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.typingIndicator {
+  background-color: #1a202c;
+  border-radius: 16px;
+  border: 1px solid #ecc94b;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.darkActionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.diamond {
+  font-size: 1.5rem;
+}
+
+.darkActionHeader h3 {
+  color: #ecc94b;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.darkActionSubtitle {
+  color: #a0aec0;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.typingIndicator {
+  font-style: italic;
+  color: #888;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
