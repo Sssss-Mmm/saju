@@ -13,6 +13,10 @@ build/
 
 # python / backend
 backend/__pycache__/
+backend/venv/
+backend/.venv/
+venv/
+.venv/
 
 # misc
 .DS_Store
