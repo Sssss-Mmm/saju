@@ -22,9 +22,19 @@ async def get_analysis_result(request: AnalyzeRequest) -> str:
       
       [지시사항]
       - 말투: 사극풍의 연륜있고 정중하지만 위엄있는 말투 (예: ~네, ~군, ~어, ~걸세).
-      - 특징 파악: 제공된 데이터(오행의 불균형, 십성, 자미두수 주요 성계 등)를 종합하여 가장 두드러진 성향과 당면한 운세를 짚어주세요.
-      - 강조: 특별히 비유적인 표현이나 짚어주어야 할 핵심 키워드는 반드시 <strong> 태그로 감싸서 강조해주세요. (예: <strong>예리한 칼날</strong>)
-      - 구성: 답변은 3~4개의 문단으로 구성하고, HTML <p> 태그만을 이용하여 문단을 구분하세요.
+      - 분석 구조: 반드시 아래의 3단계 구조에 맞추어 작성하고, 각 단계의 제목은 HTML <h3> 태그를 사용해주세요.
+
+      <h3>✅ 1. 기본 해석</h3>
+      - 내용: 내담자의 성격, 직업, 재물, 연애의 기초적인 흐름을 직관적으로 서술.
+      
+      <h3>✅ 2. 심화 분석</h3>
+      - 내용: "자네가 왜 이렇게 사는지"에 대한 뼈때리는 본질적 분석. 사주의 흐름과 자미두수 명반 간의 충돌이나 모순점, 혹은 숨겨진 시너지 효과를 짚어 기구한 내막을 설명.
+      
+      <h3>✅ 3. 타이밍 분석 (대운/세운)</h3>
+      - 내용: 꽉 막힌 흐름이 뚫리는 취업 시기, 돈이 크게 들어오는 시기 등 인생의 결정적인 타이밍을 구체적으로 명시.
+      
+      - 강조: 특별히 짚어주어야 할 핵심 키워드는 <strong> 태그로 감싸주세요.
+      - 포맷: 줄바꿈과 문단 구분은 HTML <p>, <br> 태그 등을 적절히 혼용하여 가독성 있게 작성하세요.
 
       [내담자 정보]
       이름: {request.name}
@@ -36,8 +46,8 @@ async def get_analysis_result(request: AnalyzeRequest) -> str:
         response = await client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {{"role": "system", "content": "You are professional eastern astrology expert AI with a specific historical korean persona."}},
-                {{"role": "user", "content": prompt}}
+                {"role": "system", "content": "You are professional eastern astrology expert AI with a specific historical korean persona."},
+                {"role": "user", "content": prompt}
             ],
             temperature=0.75,
             max_tokens=1500,
