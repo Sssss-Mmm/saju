@@ -11,9 +11,11 @@ export default function ResultPage() {
   const [data, setData] = useState<{ bazi: any, ziwei: any } | null>(null);
   const [analysisText, setAnalysisText] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(true);
+  const [personName, setPersonName] = useState<string>("");
 
   useEffect(() => {
     const name = searchParams.get('name') || "이승민";
+    setPersonName(name);
     
     // 1. 사주/자미두수 데이터 준비 (iztro 등 연동 전 더미)
     const simulatedData = {
@@ -37,7 +39,7 @@ export default function ResultPage() {
       .catch(err => console.error(err))
       .finally(() => setIsAnalyzing(false));
 
-    }, 800); // 명식 기본 계산 대기시간 시뮬레이션
+    }, 800);
 
   }, [searchParams]);
 
@@ -50,17 +52,23 @@ export default function ResultPage() {
     );
   }
 
+  const requestBody = { name: personName, bazi: data.bazi, ziwei: data.ziwei };
+
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
         <h1 className="title-gradient" style={{ fontSize: '2.5rem' }}>심화 분석 결과</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>{searchParams.get('name')}님의 명식과 12궁 명반</p>
+        <p style={{ color: 'var(--text-secondary)' }}>{personName}님의 명식과 12궁 명반</p>
       </header>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         <BaziChart data={data.bazi} />
         <ZiweiChart data={data.ziwei} />
-        <AnalysisReport contentHtml={analysisText} isLoading={isAnalyzing} />
+        <AnalysisReport 
+          contentHtml={analysisText} 
+          isLoading={isAnalyzing}
+          requestBody={requestBody}
+        />
       </div>
     </div>
   );

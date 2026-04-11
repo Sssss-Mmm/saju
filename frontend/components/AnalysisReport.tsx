@@ -1,51 +1,66 @@
 "use client";
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './AnalysisReport.module.css';
 
 interface Props {
   contentHtml?: string;
   isLoading?: boolean;
+  requestBody?: { name: string; bazi: any; ziwei: any };
 }
 
 type FilterType = 'ALL' | 'LOVE' | 'CAREER';
 
-export default function AnalysisReport({ contentHtml, isLoading }: Props) {
+export default function AnalysisReport({ contentHtml, isLoading, requestBody }: Props) {
   const [filter, setFilter] = useState<FilterType>('ALL');
+  const [loveHtml, setLoveHtml] = useState<string>('');
+  const [careerHtml, setCareerHtml] = useState<string>('');
+  const [loveLoading, setLoveLoading] = useState(false);
+  const [careerLoading, setCareerLoading] = useState(false);
+  const fetchedLove = useRef(false);
+  const fetchedCareer = useRef(false);
 
-  const filteredContent = useMemo(() => {
-    if (!contentHtml) return '';
-    if (filter === 'ALL') return contentHtml;
-
-    // 브라우저 환경에서 DOM 파싱을 통해 필터링
-    if (typeof window !== 'undefined') {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = contentHtml;
-      
-      let html = '';
-      const elements = Array.from(tempDiv.children);
-
-      elements.forEach(el => {
-        const text = el.textContent || '';
-        
-        if (filter === 'LOVE') {
-          if (text.includes('연애') || text.includes('애정') || text.includes('결혼') || text.includes('부처') || text.includes('인연')) {
-            html += el.outerHTML;
-          }
-        } else if (filter === 'CAREER') {
-          if (text.includes('취업') || text.includes('재물') || text.includes('돈') || text.includes('직업') || text.includes('관운') || text.includes('타이밍')) {
-            html += el.outerHTML;
-          }
-        }
-      });
-
-      if (!html) {
-        return '<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">해당 키워드를 포함하는 구체적인 풀이가 아직 생성되지 않았습니다. 전체 보기를 확인해주세요.</p>';
-      }
-      return html;
+  // 연애 탭 클릭 시 API 호출 (최초 1회)
+  useEffect(() => {
+    if (filter === 'LOVE' && !fetchedLove.current && requestBody) {
+      fetchedLove.current = true;
+      setLoveLoading(true);
+      fetch('/api/analyze/love', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      })
+        .then(res => res.json())
+        .then(json => { if (json.content) setLoveHtml(json.content); })
+        .catch(err => console.error(err))
+        .finally(() => setLoveLoading(false));
     }
-    return contentHtml;
-  }, [contentHtml, filter]);
+  }, [filter, requestBody]);
 
+  // 커리어 탭 클릭 시 API 호출 (최초 1회)
+  useEffect(() => {
+    if (filter === 'CAREER' && !fetchedCareer.current && requestBody) {
+      fetchedCareer.current = true;
+      setCareerLoading(true);
+      fetch('/api/analyze/career', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      })
+        .then(res => res.json())
+        .then(json => { if (json.content) setCareerHtml(json.content); })
+        .catch(err => console.error(err))
+        .finally(() => setCareerLoading(false));
+    }
+  }, [filter, requestBody]);
+
+  const currentHtml = filter === 'ALL' ? contentHtml : filter === 'LOVE' ? loveHtml : careerHtml;
+  const currentLoading = filter === 'ALL' ? isLoading : filter === 'LOVE' ? loveLoading : careerLoading;
+
+  const loadingMessages: Record<FilterType, string> = {
+    ALL: '명식과 기운을 읽고 있네...',
+    LOVE: '인연의 실타래를 풀고 있네...',
+    CAREER: '관운의 흐름을 가늠하고 있네...',
+  };
 
   return (
     <div className={styles.chatContainer}>
@@ -84,12 +99,12 @@ export default function AnalysisReport({ contentHtml, isLoading }: Props) {
           </div>
           
           <div className={styles.chatContent} style={{ animation: 'fadeIn 0.5s ease-out' }}>
-            {isLoading ? (
+            {currentLoading ? (
               <div className={styles.typingIndicator}>
-                <span>.</span><span>.</span><span>.</span> 명식과 기운을 읽고 있네...
+                <span>.</span><span>.</span><span>.</span> {loadingMessages[filter]}
               </div>
-            ) : contentHtml ? (
-               <div dangerouslySetInnerHTML={{ __html: filteredContent }} />
+            ) : currentHtml ? (
+               <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
             ) : null}
           </div>
         </div>
