@@ -1,87 +1,100 @@
-# 천기누설 (天機漏洩) - 사주 & 자미두수 프리미엄 운세 분석
+# 🔮 천기누설 (天機漏洩)
+### 사주(四柱) & 자미두수(紫微斗數) 프리미엄 운세 AI 분석 서비스
 
-천기누설은 사주팔자(명리학)와 자미두수를 결합하여 심도 있는 운세 분석을 제공하는 프리미엄 웹 애플리케이션입니다. 사용자의 생년월일시를 바탕으로 개인의 명반을 구성하고, OpenAI의 강력한 AI 모델을 활용해 재물운, 연애운, 직업운 등 인생의 핵심 요소에 대한 전문적인 해석을 제공합니다.
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-orange)
 
-## 🚀 주요 기능 (Key Features)
+**천기누설**은 전통 동양 점성술인 **명리학(사주)**과 **자미두수**를 현대적 감각으로 재해석한 프리미엄 운세 분석 플랫폼입니다. 정교한 계산 엔진과 최첨단 AI 기술을 결합하여, 단순한 운세를 넘어 당신의 인생을 관통하는 통찰력을 제공합니다.
 
-- **정밀한 명반 계산**: 출생 분 단위까지 입력받아 `iztro`, `lunar-javascript` 라이브러리를 활용해 한 치의 오차 없는 사주팔자 및 자미두수 명반(차트)을 생성합니다.
-- **AI 심층 분석**: OpenAI 로직을 통해 명리학 및 자미두수 전문 상담가 수준의 직설적이고 통찰력 있는 맞춤형 조언(성향, 재물운, 직업운, 연애운 등)을 제공합니다.
-- **프리미엄 UI/UX**: Next.js 기반으로 구축되어, 직관적이고 고품격 컨셉이 돋보이는 모던한 인터페이스를 자랑합니다.
-- **프론트엔드/백엔드 분리 아키텍처**: 프론트엔드(Next.js)와 백엔드(FastAPI)가 명확히 분리 되어있어 시스템 유지보수와 안정성이 매우 우수합니다.
+---
+
+## ✨ 주요 기능 (Key Features)
+
+### 1. 🎯 정밀한 명반(Chart) 생성
+- **사주팔자(Bazi)**: `lunar-javascript`를 활용하여 절기 기반의 정확한 사주 데이터를 추출합니다.
+- **자미두수(Zi Wei Dou Shu)**: `iztro` 엔진을 통해 출생 분 단위까지 반영된 세밀한 전택궁, 부처궁 등 12궁 명반을 구성합니다.
+
+### 2. 🤖 AI 심층 라이프 컨설팅
+- **종합 분석**: 성격, 기질, 인생의 큰 흐름을 분석합니다.
+- **테마별 분석**: 
+  - 💘 **연애/결혼**: 인연의 흐름과 연애 성향 분석
+  - 💼 **직업/성공**: 적성에 맞는 직업군과 사회적 발전 가능성
+  - 💰 **재물/투자**: 자산 형성 과정과 투자 시기 제안
+- **직설적 통찰**: 모호한 답변이 아닌, 전문 상담가 수준의 명확하고 냉철한 조언을 제공합니다.
+
+### 3. 🎨 프리미엄 UX/UI
+- **모던 디자인**: 고품격 다크 모드와 세련된 카드 레이아웃.
+- **반응형 인터페이스**: 데스크톱과 모바일 어디서나 최적화된 보기 환경을 제공합니다.
+- **실시간 리포트**: 탭 기반의 직관적인 전환으로 원하는 분야의 분석 결과를 즉시 확인 가능합니다.
+
+---
 
 ## 🛠 기술 스택 (Tech Stack)
 
-### Frontend
-- **Framework**: Next.js 15, React 18
-- **Language**: TypeScript
-- **Libraries**:
-  - `iztro` (자미두수 명반 계산)
-  - `lunar-javascript` (사주/음력 변환)
+| 구분 | 기술 |
+| :--- | :--- |
+| **Frontend** | `Next.js 15 (App Router)`, `TypeScript`, `TailwindCSS` (or Vanilla CSS) |
+| **Backend** | `FastAPI (Python)`, `Uvicorn`, `Pydantic` |
+| **AI Engine** | `OpenAI GPT-4o API` |
+| **Astrology** | `iztro (Zi Wei Dou Shu)`, `lunar-javascript (Bazi)` |
 
-### Backend
-- **Framework**: FastAPI (Python)
-- **Server**: Uvicorn
-- **AI/LLM**: OpenAI API (`openai`)
-- **Libraries**: `pydantic`, `python-dotenv`
+---
 
 ## 📂 프로젝트 구조 (Project Structure)
 
 ```text
 saju/
-├── frontend/             # Next.js 클라이언트
-│   ├── app/              # App Router 및 메인 페이지 구성
-│   ├── components/       # 폼(Form), 차트 등 UI 컴포넌트
-│   └── package.json      # 프론트엔드 의존성
-└── backend/              # FastAPI 서버
-    ├── api/              # 엔드포인트 라우터 관리
-    ├── models/           # Pydantic 데이터 스키마
-    ├── services/         # 비즈니스 로직 및 OpenAI 통합 서비스 담당
-    ├── main.py           # FastAPI 메인 애플리케이션
-    └── requirements.txt  # 백엔드 의존성 파이썬 패키지
+├── frontend/             # Next.js 클라이언트 애플리케이션
+│   ├── app/              # 메인 페이지 및 API 라우트
+│   ├── components/       # 재사용 가능한 UI 컴포넌트 (Chart, Form 등)
+│   └── styles/           # 디자인 시스템 및 CSS 설정
+└── backend/              # FastAPI 서버 애플리케이션
+    ├── api/              # API 엔드포인트 관리
+    ├── services/         # 분석 로직 및 AI 통합 서비스 (Class-based)
+    ├── models/           # 데이터 검증을 위한 Pydantic 모델
+    └── main.py           # 애플리케이션 엔트리 포인트
 ```
 
-## ⚙️ 로컬 개발 환경 설정 (Local Setup)
+---
 
-프로젝트를 실행하려면 프론트엔드와 백엔드 서버를 모두 가동해야 합니다.
+## ⚙️ 시작하기 (Getting Started)
 
-### 1. 백엔드 (Backend) 환경 준비 및 실행
+### Prerequisites
+- Node.js 18.x 이상
+- Python 3.9 이상
+- OpenAI API Key
 
+### 1. Backend 설정
 ```bash
-# 1. 백엔드 디렉토리로 이동
 cd backend
-
-# 2. (권장) 파이썬 가상환경 생성 및 활성화
 python -m venv venv
-
-# Mac/OSX/Linux
+# Linux/Mac
 source venv/bin/activate
-# Windows PowerShell
+# Windows
 .\venv\Scripts\activate
 
-# 3. 의존성 패키지 설치
 pip install -r requirements.txt
 
-# 4. 환경 변수 설정
-# backend 폴더 안에 .env 파일을 생성하고 아래와 같이 발급받은 API 키를 입력합니다.
-# OPENAI_API_KEY=your_openai_api_key_here
+# .env 파일 생성
+echo "OPENAI_API_KEY=your_key_here" > .env
 
-# 5. 서버 실행
-uvicorn main:app --reload
+python main.py
 ```
-API 서버 구동 확인 및 테스트는 `http://localhost:8000/docs` (Swagger UI) 에서 할 수 있습니다.
 
-### 2. 프론트엔드 (Frontend) 환경 준비 및 실행
-
-새로운 터미널(Terminal) 창을 엽니다.
-
+### 2. Frontend 설정
 ```bash
-# 1. 프론트엔드 디렉토리로 이동
 cd frontend
-
-# 2. Node.js 패키지 설치
 npm install
-
-# 3. 개발 서버 실행
 npm run dev
 ```
-웹 브라우저를 열고 `http://localhost:3000` 에 접속하여 애플리케이션을 이용해 보세요.
+브라우저에서 `http://localhost:3000` 접속 후 사용 가능합니다.
+
+---
+
+## 📜 라이선스 (License)
+본 프로젝트는 개인 학습 및 포트폴리오 목적으로 제작되었습니다.
+
+---
+주변인의 삶을 더 가치 있게 만드는 데이터의 힘, **천기누설**입니다.
