@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from models.schemas import AnalyzeRequest, AnalyzeResponse
+from models.schemas import AnalyzeRequest, AnalyzeResponse, QuestionRequest
 from services.analyze_service import AnalysisService, get_analysis_service
 
 router = APIRouter()
@@ -30,3 +30,11 @@ async def analyze_career(
     content = await service.analyze_career(request)
     return AnalyzeResponse(content=content)
 
+@router.post("/analyze/question", response_model=AnalyzeResponse)
+async def analyze_question(
+    request: QuestionRequest,
+    service: AnalysisService = Depends(get_analysis_service)
+):
+    """사용자의 개별 질문에 대한 심층 답변"""
+    content = await service.ask_question(request)
+    return AnalyzeResponse(content=content)

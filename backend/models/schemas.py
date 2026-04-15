@@ -8,3 +8,6 @@ class AnalyzeRequest(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     content: str
+
+class QuestionRequest(AnalyzeRequest):
+    question: str

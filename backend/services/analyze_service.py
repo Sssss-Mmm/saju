@@ -1,7 +1,7 @@
 import asyncio
 from openai import AsyncOpenAI
 from fastapi import HTTPException
-from models.schemas import AnalyzeRequest
+from models.schemas import AnalyzeRequest, QuestionRequest
 from core.config import settings
 
 class AnalysisService:
@@ -171,6 +171,34 @@ class AnalysisService:
             await asyncio.sleep(1.5)
             return "<p>💼 (데모 모드) API 키가 없어 커리어 심화 분석을 제공할 수 없습니다.</p>"
         return await self._call_llm(self._build_career_prompt(request))
+
+    def _build_question_prompt(self, request: QuestionRequest) -> str:
+        """사용자의 특정 질문에 대답하는 프롬프트를 생성합니다."""
+        return f"""
+      당신은 명리학 계승자이자 운명 설계사인 '이현'입니다. (정중하면서도 뼈 때리는 직설적인 말투: ~네, ~군, ~걸세, ~하는 법이네.)
+      아래 내담자({request.name})의 사주와 자미두수 정보를 바탕으로, 내담자가 방금 던진 질문에 대해 날카롭고 명확하게 답변해 주세요.
+
+      [지시사항]
+      - 말투: 단호하고 확신에 찬 어조. 사극풍의 연륜있고 정중하지만 위엄있는 말투.
+      - 포맷: 반드시 HTML 태그를 사용하세요. (<p>, <strong> 등 사용). 목록이 필요하면 <ul>, <li> 사용.
+      - 두루뭉술한 말 대신, 명반에 근거하여 핵심만 정확히 짚어서 뼈때리는 조언을 해주세요.
+      - 질문 내용에만 집중하여 대답하세요.
+
+      [내담자 정보]
+      이름: {request.name}
+      사주 정보: {request.bazi or {}}
+      자미두수 정보: {request.ziwei or {}}
+
+      [내담자의 질문]
+      {request.question}
+      """
+
+    async def ask_question(self, request: QuestionRequest) -> str:
+        """특정 질문에 대한 심화 분석 답변."""
+        if not self.client or not self.client.api_key:
+            await asyncio.sleep(1.5)
+            return "<p>💭 (데모 모드) API 키가 없어 질문에 답변할 수 없네. 명반만 쳐다보고 있을 수밖에.</p>"
+        return await self._call_llm(self._build_question_prompt(request))
 
 
 def get_analysis_service() -> AnalysisService:

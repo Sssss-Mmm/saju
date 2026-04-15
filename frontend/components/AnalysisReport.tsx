@@ -8,7 +8,12 @@ interface Props {
   requestBody?: { name: string; bazi: any; ziwei: any };
 }
 
-type FilterType = 'ALL' | 'LOVE' | 'CAREER';
+type FilterType = 'ALL' | 'LOVE' | 'CAREER' | 'QNA';
+
+interface QnaMessage {
+  role: 'user' | 'ai';
+  contentHtml: string;
+}
 
 export default function AnalysisReport({ contentHtml, isLoading, requestBody }: Props) {
   const [filter, setFilter] = useState<FilterType>('ALL');
@@ -18,6 +23,12 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
   const [careerLoading, setCareerLoading] = useState(false);
   const fetchedLove = useRef(false);
   const fetchedCareer = useRef(false);
+
+  // Q&A State
+  const [qnaHistory, setQnaHistory] = useState<QnaMessage[]>([]);
+  const [questionInput, setQuestionInput] = useState("");
+  const [qnaLoading, setQnaLoading] = useState(false);
+  const chatListRef = useRef<HTMLDivElement>(null);
 
   // 연애 탭 클릭 시 API 호출 (최초 1회)
   useEffect(() => {
@@ -53,6 +64,42 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
     }
   }, [filter, requestBody]);
 
+  // 자동 스크롤
+  useEffect(() => {
+    if (chatListRef.current && filter === 'QNA') {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  }, [qnaHistory, qnaLoading, filter]);
+
+  const handleAskQuestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!questionInput.trim() || !requestBody || qnaLoading) return;
+
+    const userMsg = questionInput.trim();
+    setQnaHistory(prev => [...prev, { role: 'user', contentHtml: `<p>${userMsg}</p>` }]);
+    setQuestionInput("");
+    setQnaLoading(true);
+
+    try {
+      const res = await fetch('/api/analyze/question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...requestBody, question: userMsg }),
+      });
+      const json = await res.json();
+      if (json.content) {
+        setQnaHistory(prev => [...prev, { role: 'ai', contentHtml: json.content }]);
+      } else {
+        setQnaHistory(prev => [...prev, { role: 'ai', contentHtml: "<p>오류가 생겼네. 다시 물어보게.</p>" }]);
+      }
+    } catch (err) {
+      console.error(err);
+      setQnaHistory(prev => [...prev, { role: 'ai', contentHtml: "<p>통신에 문제가 생겼군. 다시 시도해보게.</p>" }]);
+    } finally {
+      setQnaLoading(false);
+    }
+  };
+
   const currentHtml = filter === 'ALL' ? contentHtml : filter === 'LOVE' ? loveHtml : careerHtml;
   const currentLoading = filter === 'ALL' ? isLoading : filter === 'LOVE' ? loveLoading : careerLoading;
 
@@ -60,6 +107,7 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
     ALL: '명식과 기운을 읽고 있네...',
     LOVE: '인연의 실타래를 풀고 있네...',
     CAREER: '관운의 흐름을 가늠하고 있네...',
+    QNA: '명반을 짚어보고 있네...',
   };
 
   return (
@@ -88,27 +136,90 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
               background: filter === 'CAREER' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
               color: 'white', cursor: 'pointer', transition: 'all 0.2s'
             }}>💼 취업/타이밍 보기</button>
+          <button 
+            onClick={() => setFilter('QNA')}
+            style={{ 
+              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
+              background: filter === 'QNA' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
+              color: 'white', cursor: 'pointer', transition: 'all 0.2s'
+            }}>💭 직접 질문하기</button>
         </div>
       )}
 
-      <div className={styles.chatBubbleContainer}>
-        <div className={styles.chatBubble}>
-          <div className={styles.chatHeader}>
-            <span className={styles.avatar}>💬</span>
-            <span className={styles.sender}>이현:</span>
+      {filter === 'QNA' ? (
+        <div className={styles.qnaMode}>
+          <div className={styles.chatList} ref={chatListRef}>
+            {qnaHistory.length === 0 && (
+              <div className={styles.chatBubbleContainer} style={{ marginBottom: '10px' }}>
+                <div className={styles.chatBubble}>
+                  <div className={styles.chatHeader}>
+                    <span className={styles.avatar}>💬</span>
+                    <span className={styles.sender}>이현:</span>
+                  </div>
+                  <div className={styles.chatContent}>
+                    <p>궁금한 것이 있다면 무엇이든 물어보게. 자네의 명반을 보고 솔직하게 답해줄 테니.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {qnaHistory.map((msg, idx) => (
+              <div key={idx} className={msg.role === 'user' ? styles.userBubbleContainer : styles.aiBubbleContainer}>
+                <div className={styles.chatBubble}>
+                  <div className={styles.chatHeader}>
+                    <span className={styles.avatar}>{msg.role === 'user' ? '👤' : '💬'}</span>
+                    <span className={styles.sender}>{msg.role === 'user' ? '내담자:' : '이현:'}</span>
+                  </div>
+                  <div className={styles.chatContent} dangerouslySetInnerHTML={{ __html: msg.contentHtml }} />
+                </div>
+              </div>
+            ))}
+            
+            {qnaLoading && (
+              <div className={styles.aiBubbleContainer}>
+                <div className={styles.chatBubble}>
+                   <div className={styles.typingIndicator}>
+                     <span>.</span><span>.</span><span>.</span> {loadingMessages['QNA']}
+                   </div>
+                </div>
+              </div>
+            )}
           </div>
           
-          <div className={styles.chatContent} style={{ animation: 'fadeIn 0.5s ease-out' }}>
-            {currentLoading ? (
-              <div className={styles.typingIndicator}>
-                <span>.</span><span>.</span><span>.</span> {loadingMessages[filter]}
-              </div>
-            ) : currentHtml ? (
-               <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
-            ) : null}
+          <form className={styles.qnaInputForm} onSubmit={handleAskQuestion}>
+            <input 
+              type="text" 
+              className={styles.qnaInput} 
+              placeholder="예: 내년에 창업을 해도 괜찮을까요?" 
+              value={questionInput} 
+              onChange={e => setQuestionInput(e.target.value)}
+              disabled={qnaLoading}
+            />
+            <button type="submit" className={styles.qnaSubmitBtn} disabled={qnaLoading || !questionInput.trim()}>
+              질문하기
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className={styles.chatBubbleContainer}>
+          <div className={styles.chatBubble}>
+            <div className={styles.chatHeader}>
+              <span className={styles.avatar}>💬</span>
+              <span className={styles.sender}>이현:</span>
+            </div>
+            
+            <div className={styles.chatContent} style={{ animation: 'fadeIn 0.5s ease-out' }}>
+              {currentLoading ? (
+                <div className={styles.typingIndicator}>
+                  <span>.</span><span>.</span><span>.</span> {loadingMessages[filter]}
+                </div>
+              ) : currentHtml ? (
+                 <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {!isLoading && contentHtml && (
         <div className={styles.darkActionCard}>
