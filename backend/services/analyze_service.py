@@ -1,4 +1,5 @@
 import asyncio
+import re
 from openai import AsyncOpenAI
 from fastapi import HTTPException
 from models.schemas import AnalyzeRequest, QuestionRequest
@@ -140,13 +141,17 @@ class AnalysisService:
             response = await self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
-                    {"role": "system", "content": "You are professional eastern astrology expert AI with a specific historical korean persona."},
+                    {"role": "system", "content": "You are a professional eastern astrology expert AI with a specific historical korean persona. Please do not wrap your response in markdown code blocks like ```html ... ```. Just return the raw HTML string."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.75,
                 max_tokens=2000,
             )
-            return response.choices[0].message.content
+            content = response.choices[0].message.content.strip()
+            # 마크다운 블록(예: ```html ... ```)을 제거합니다.
+            content = re.sub(r"^```[a-zA-Z]*\n?", "", content)
+            content = re.sub(r"\n?```$", "", content)
+            return content.strip()
         except Exception as e:
             print("OpenAI Error:", e)
             raise HTTPException(status_code=500, detail="Failed to fetch analysis from LLM")
