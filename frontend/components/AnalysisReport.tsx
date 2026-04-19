@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './AnalysisReport.module.css';
+import SoloEscapeReport, { SoloEscapeData } from './SoloEscapeReport';
 
 interface Props {
   contentHtml?: string;
@@ -8,7 +9,7 @@ interface Props {
   requestBody?: { name: string; bazi: any; ziwei: any };
 }
 
-type FilterType = 'ALL' | 'LOVE' | 'CAREER' | 'QNA';
+type FilterType = 'ALL' | 'LOVE' | 'CAREER' | 'QNA' | 'SOLO';
 
 interface QnaMessage {
   role: 'user' | 'ai';
@@ -19,10 +20,13 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
   const [filter, setFilter] = useState<FilterType>('ALL');
   const [loveHtml, setLoveHtml] = useState<string>('');
   const [careerHtml, setCareerHtml] = useState<string>('');
+  const [soloData, setSoloData] = useState<SoloEscapeData | null>(null);
   const [loveLoading, setLoveLoading] = useState(false);
   const [careerLoading, setCareerLoading] = useState(false);
+  const [soloLoading, setSoloLoading] = useState(false);
   const fetchedLove = useRef(false);
   const fetchedCareer = useRef(false);
+  const fetchedSolo = useRef(false);
 
   // Q&A State
   const [qnaHistory, setQnaHistory] = useState<QnaMessage[]>([]);
@@ -64,6 +68,25 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
     }
   }, [filter, requestBody]);
 
+  // 솔로 탈출 탭 클릭 시 API 호출 (최초 1회)
+  useEffect(() => {
+    if (filter === 'SOLO' && !fetchedSolo.current && requestBody) {
+      fetchedSolo.current = true;
+      setSoloLoading(true);
+      fetch('/api/analyze/solo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.meeting) setSoloData(json as SoloEscapeData);
+        })
+        .catch(err => console.error(err))
+        .finally(() => setSoloLoading(false));
+    }
+  }, [filter, requestBody]);
+
   // 자동 스크롤
   useEffect(() => {
     if (chatListRef.current && filter === 'QNA') {
@@ -100,14 +123,15 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
     }
   };
 
-  const currentHtml = filter === 'ALL' ? contentHtml : filter === 'LOVE' ? loveHtml : careerHtml;
-  const currentLoading = filter === 'ALL' ? isLoading : filter === 'LOVE' ? loveLoading : careerLoading;
+  const currentHtml = filter === 'ALL' ? contentHtml : filter === 'LOVE' ? loveHtml : filter === 'CAREER' ? careerHtml : '';
+  const currentLoading = filter === 'ALL' ? isLoading : filter === 'LOVE' ? loveLoading : filter === 'CAREER' ? careerLoading : false;
 
   const loadingMessages: Record<FilterType, string> = {
     ALL: '명식과 기운을 읽고 있네...',
     LOVE: '인연의 실타래를 풀고 있네...',
     CAREER: '관운의 흐름을 가늠하고 있네...',
     QNA: '명반을 짚어보고 있네...',
+    SOLO: '운명의 그 사람을 찾고 있네...',
   };
 
   return (
@@ -143,10 +167,28 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
               background: filter === 'QNA' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
               color: 'white', cursor: 'pointer', transition: 'all 0.2s'
             }}>💭 직접 질문하기</button>
+          <button 
+            onClick={() => setFilter('SOLO')}
+            style={{ 
+              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
+              background: filter === 'SOLO' ? 'linear-gradient(135deg, hsl(330,70%,40%), hsl(280,60%,40%))' : 'rgba(255,255,255,0.05)',
+              color: 'white', cursor: 'pointer', transition: 'all 0.2s',
+              boxShadow: filter === 'SOLO' ? '0 0 14px hsl(310,70%,45%,0.5)' : 'none'
+            }}>💘 솔로 탈출</button>
         </div>
       )}
 
-      {filter === 'QNA' ? (
+      {filter === 'SOLO' ? (
+        <SoloEscapeReport
+          data={soloData || {
+            meeting: { timing: '', place: '', situation: '', probability: '' },
+            person: { gender: '', age_range: '', appearance: '', personality: '', occupation: '', image_prompt: '' },
+            script: { opening_line: '', follow_up: '', backup_line: '' },
+            motivation: '',
+          }}
+          isLoading={soloLoading || !soloData}
+        />
+      ) : filter === 'QNA' ? (
         <div className={styles.qnaMode}>
           <div className={styles.chatList} ref={chatListRef}>
             {qnaHistory.length === 0 && (

@@ -1,8 +1,9 @@
 import asyncio
 import re
+import json
 from openai import AsyncOpenAI
 from fastapi import HTTPException
-from models.schemas import AnalyzeRequest, QuestionRequest
+from models.schemas import AnalyzeRequest, QuestionRequest, SoloEscapeResponse, SoloMeeting, SoloPerson, SoloScript
 from core.config import settings
 
 class AnalysisService:
@@ -204,6 +205,121 @@ class AnalysisService:
             await asyncio.sleep(1.5)
             return "<p>💭 (데모 모드) API 키가 없어 질문에 답변할 수 없네. 명반만 쳐다보고 있을 수밖에.</p>"
         return await self._call_llm(self._build_question_prompt(request))
+
+    def _build_solo_escape_prompt(self, request: AnalyzeRequest) -> str:
+        """솔로 탈출 & 운명 예측 프롬프트를 생성합니다."""
+        return f"""
+당신은 명리학 계승자이자 운명 설계사인 '이현'입니다.
+이번에는 내담자({request.name})의 사주와 자미두수 기반으로
+'운명적 첫 만남'을 예언하고, 실제 행동 지침까지 제공합니다.
+
+[역할]
+내담자의 솔로 기간을 끊어줄 운명적 만남을 구체적으로 예측하고,
+그 상대방의 외모·성격·직업을 묘사하며,
+실제로 마주쳤을 때 어떻게 말해야 번호를 받아낼 수 있는지 대사까지 작성합니다.
+
+[지시사항]
+- 내담자의 사주·자미두수 정보를 바탕으로 실제 명리학적 근거를 들어 예측하세요.
+- 반드시 아래 JSON 형식 그대로만 출력하세요. 다른 텍스트는 절대 포함하지 마세요.
+- 모든 내용은 한국어로 작성하세요. image_prompt 필드만 영어로 작성하세요.
+- 두루뭉술하지 않게 구체적이고 생생하게 작성하세요.
+
+[출력 JSON 형식]
+{{
+  "meeting": {{
+    "timing": "구체적인 시기 (예: 2026년 7월 둘째 주, 금요일 저녁 6시~9시)",
+    "place": "구체적인 장소 (예: 홍대 루프탑 바 또는 성수동 카페)",
+    "situation": "어떤 상황에서 마주치는지 (예: 화장실 앞에서 눈이 마주침)",
+    "probability": "명리학적 근거를 바탕으로 한 성사 가능성 (예: 78%)"
+  }},
+  "person": {{
+    "gender": "성별",
+    "age_range": "나이대 (예: 26~30세)",
+    "appearance": "외모 묘사 (헤어스타일, 눈빛, 체형, 스타일 등 아주 상세하게)",
+    "personality": "성격 특성 (MBTI 포함 가능)",
+    "occupation": "직업군 (2~3가지)",
+    "image_prompt": "Photorealistic portrait of a [age]-year-old Korean [gender] with [specific hair], [eye description], wearing [outfit], at [location], [lighting], cinematic, 8k"
+  }},
+  "script": {{
+    "opening_line": "첫 마디 대사 (자연스럽고 부담 없이 말 걸 수 있는 대사)",
+    "follow_up": "대화를 이어가며 번호를 받는 흐름과 정확한 대사",
+    "backup_line": "상대방이 바로 자리를 뜨려 할 때 쓰는 긴급 대사"
+  }},
+  "motivation": "이 기회를 놓치면 다음 인연운은 언제인지, 지금 행동하지 않으면 어떤 손해인지 뼈때리게 한 단락으로"
+}}
+
+[내담자 정보]
+이름: {request.name}
+사주 정보: {request.bazi or {}}
+자미두수 정보: {request.ziwei or {}}
+        """
+
+    async def _generate_portrait_image(self, image_prompt: str) -> str | None:
+        """(비활성화) DALL-E 3 이미지 생성 대신 텍스트 묘사를 사용합니다."""
+        return None
+
+    def _get_mock_solo_data(self, name: str) -> SoloEscapeResponse:
+        """API 키 없을 때 반환할 솔로 탈출 mock 데이터."""
+        return SoloEscapeResponse(
+            meeting=SoloMeeting(
+                timing="2026년 8월 둘째 주, 목요일 저녁 7시~9시",
+                place="홍대 루프탑 바 또는 성수동 북카페",
+                situation="서로 혼자 온 손님끼리 바 테이블 옆자리에 앉으면서 눈이 마주침",
+                probability="82%"
+            ),
+            person=SoloPerson(
+                gender="여성",
+                age_range="27~31세",
+                appearance="쇄골 길이의 부드러운 웨이브 머리, 따뜻한 아몬드 눈동자, 슬림한 체형에 베이지톤 린넨 셔츠 즐겨 입는 스타일",
+                personality="조용하고 사려깊지만 속으로 열정이 넘치는 INFJ 타입. 감수성이 풍부하고 깊은 대화를 좋아함.",
+                occupation="UX 디자이너 또는 큐레이터",
+                image_prompt="Photorealistic portrait of a 28-year-old Korean woman with soft wavy collarbone-length hair, warm almond eyes, wearing a beige linen shirt, sitting at a rooftop bar at golden hour, soft cinematic lighting, 8k"
+            ),
+            script=SoloScript(
+                opening_line='"저... 실례지만 여기 자주 오세요? 오늘 처음 왔는데 분위기가 너무 좋아서요."',
+                follow_up='자연스럽게 취향 이야기를 나누다가: "오늘 정말 즐거웠어요. 혹시 연락처 받아도 될까요? 다음에 또 이런 곳 같이 오고 싶어서요."',
+                backup_line='상대방이 자리를 뜨려 할 때: "저도 사실 슬슬 가려던 참이었어요. 혹시 근처 카페 아세요? 한 잔 더 하실 생각 있으시면..."'
+            ),
+            motivation=f"{name}님, 이 운의 흐름은 올해가 지나면 18개월 후에나 다시 옵니다. 명반에 이렇게 선명히 쓰인 인연이 오는데 행동하지 않으면, 그건 운명의 탓이 아니라 자네의 탓이네. 지금 이 순간, 일어서게.",
+            image_url=None
+        )
+
+    async def analyze_solo_escape(self, request: AnalyzeRequest) -> SoloEscapeResponse:
+        """솔로 탈출 & 운명 예측 통합 분석."""
+        if not self.client or not self.client.api_key:
+            await asyncio.sleep(1.5)
+            return self._get_mock_solo_data(request.name or "내담자")
+
+        # 1. LLM으로 예측 텍스트 생성
+        prompt = self._build_solo_escape_prompt(request)
+        try:
+            response = await self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a Korean astrology expert. Output ONLY valid JSON. No markdown, no code blocks, no extra text."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.85,
+                max_tokens=1500,
+                response_format={"type": "json_object"},
+            )
+            raw_json = response.choices[0].message.content.strip()
+            data = json.loads(raw_json)
+        except Exception as e:
+            print(f"솔로 탈출 LLM 오류: {e}")
+            raise HTTPException(status_code=500, detail="솔로 탈출 예측 생성 실패")
+
+        # 2. image_url은 사용하지 않음 (텍스트 묘사로 대체)
+        image_url = None
+
+        # 3. 응답 구성
+        return SoloEscapeResponse(
+            meeting=SoloMeeting(**data["meeting"]),
+            person=SoloPerson(**data["person"]),
+            script=SoloScript(**data["script"]),
+            motivation=data["motivation"],
+            image_url=image_url
+        )
 
 
 def get_analysis_service() -> AnalysisService:

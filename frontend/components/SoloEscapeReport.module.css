@@ -1,0 +1,380 @@
+/* ── 전체 래퍼 ── */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── 로딩 상태 ── */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.loadingOrb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsl(320, 90%, 65%), hsl(280, 80%, 50%));
+  animation: pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 40px hsl(300, 80%, 60%);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.75; }
+}
+
+.loadingText {
+  font-size: 1.2rem;
+  color: hsl(320, 80%, 75%);
+  font-weight: 600;
+}
+
+.loadingSubtext {
+  font-size: 0.875rem;
+  color: var(--text-secondary, hsl(0, 0%, 55%));
+}
+
+/* ── 히어로 배너 ── */
+.heroBanner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: linear-gradient(135deg, hsl(330, 70%, 18%) 0%, hsl(280, 60%, 15%) 100%);
+  border: 1px solid hsl(320, 60%, 35%);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+
+.heroGlow {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(ellipse, hsl(320, 80%, 50%, 0.3), transparent 70%);
+  pointer-events: none;
+}
+
+.heroEmoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.heroTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, hsl(340, 90%, 75%), hsl(290, 80%, 75%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.5rem;
+}
+
+.heroSubtitle {
+  color: hsl(320, 40%, 70%);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ── 섹션 공통 ── */
+.section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.sectionIcon {
+  font-size: 1.4rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: hsl(320, 80%, 80%);
+  margin: 0;
+  flex: 1;
+}
+
+.probabilityBadge {
+  background: linear-gradient(135deg, hsl(320, 80%, 40%), hsl(280, 70%, 40%));
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: 0 0 12px hsl(300, 70%, 40%, 0.5);
+}
+
+/* ── 만남 예측 그리드 ── */
+.meetingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.meetingCard {
+  background: rgba(255, 100, 150, 0.06);
+  border: 1px solid rgba(255, 100, 150, 0.15);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.meetingLabel {
+  font-size: 0.75rem;
+  color: hsl(320, 60%, 65%);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meetingValue {
+  font-size: 0.95rem;
+  color: hsl(0, 0%, 88%);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── 외모 묘사 카드 ── */
+.appearanceCard {
+  flex-shrink: 0;
+  width: 180px;
+  min-height: 160px;
+  background: linear-gradient(145deg, hsl(330, 40%, 14%), hsl(280, 40%, 12%));
+  border: 1px solid hsl(320, 40%, 30%);
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.appearanceIconRow {
+  margin-bottom: 0.25rem;
+}
+
+.appearanceIconBig {
+  font-size: 2rem;
+  display: block;
+  animation: float 3s ease-in-out infinite;
+}
+
+.appearanceLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: hsl(320, 60%, 65%);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.appearanceDesc {
+  font-size: 0.82rem;
+  color: hsl(0, 0%, 82%);
+  line-height: 1.65;
+  margin: 0;
+  text-align: left;
+}
+
+.personDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.personBadgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.personBadge {
+  background: rgba(255, 100, 150, 0.1);
+  border: 1px solid rgba(255, 100, 150, 0.25);
+  color: hsl(330, 80%, 75%);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.personInfoBlock {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.personInfoLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: hsl(320, 60%, 65%);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.35rem;
+}
+
+.personInfoText {
+  font-size: 0.9rem;
+  color: hsl(0, 0%, 82%);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── 실전 대사 스크립트 ── */
+.scriptContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.scriptStep {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: rgba(255, 150, 100, 0.05);
+  border: 1px solid rgba(255, 150, 100, 0.15);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.scriptBackup {
+  background: rgba(255, 200, 50, 0.05);
+  border-color: rgba(255, 200, 50, 0.2);
+}
+
+.scriptStepNum {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, hsl(330, 80%, 45%), hsl(280, 70%, 45%));
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px hsl(300, 70%, 45%, 0.4);
+}
+
+.scriptBackup .scriptStepNum {
+  background: linear-gradient(135deg, hsl(40, 80%, 45%), hsl(20, 70%, 45%));
+  box-shadow: 0 0 10px hsl(30, 70%, 45%, 0.4);
+}
+
+.scriptContent {
+  flex: 1;
+}
+
+.scriptLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: hsl(30, 80%, 70%);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.4rem;
+}
+
+.scriptBackup .scriptLabel {
+  color: hsl(45, 80%, 70%);
+}
+
+.scriptLine {
+  font-size: 0.925rem;
+  color: hsl(0, 0%, 85%);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.scriptArrow {
+  text-align: center;
+  font-size: 1.1rem;
+  color: hsl(320, 40%, 50%);
+  padding: 0 0 0 1rem;
+}
+
+/* ── 동기부여 배너 ── */
+.motivationBanner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(135deg, hsl(350, 60%, 14%), hsl(300, 50%, 12%));
+  border: 1px solid hsl(350, 50%, 30%);
+  padding: 2rem 1.75rem;
+}
+
+.motivationGlow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, hsl(350, 80%, 50%, 0.2), transparent 70%);
+  pointer-events: none;
+}
+
+.motivationIcon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.motivationText {
+  font-size: 1rem;
+  color: hsl(0, 0%, 88%);
+  margin: 0 0 1rem;
+  line-height: 1.75;
+  font-style: italic;
+}
+
+.motivationFooter {
+  text-align: right;
+}
+
+.motivationSigned {
+  font-size: 0.85rem;
+  color: hsl(350, 60%, 60%);
+  font-weight: 600;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 640px) {
+  .meetingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .personContainer {
+    flex-direction: column;
+  }
+
+  .portraitWrapper {
+    width: 100%;
+    height: 220px;
+  }
+}
