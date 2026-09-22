@@ -11,6 +11,23 @@ interface Props {
 
 type FilterType = 'ALL' | 'LOVE' | 'CAREER' | 'QNA' | 'SOLO';
 
+const TABS: { id: FilterType; label: string }[] = [
+  { id: 'ALL', label: '🔥 전체 보기' },
+  { id: 'LOVE', label: '💕 연애' },
+  { id: 'CAREER', label: '💼 취업/타이밍' },
+  { id: 'QNA', label: '💭 직접 질문하기' },
+  { id: 'SOLO', label: '💘 솔로 탈출' },
+];
+
+// 탭마다 리포트 강조색을 통째로 바꾼다 (globals.css의 [data-hue] 참고)
+const HUE: Record<FilterType, string> = {
+  ALL: 'mind',
+  LOVE: 'love',
+  CAREER: 'career',
+  QNA: 'qna',
+  SOLO: 'solo',
+};
+
 interface QnaMessage {
   role: 'user' | 'ai';
   contentHtml: string;
@@ -135,46 +152,20 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
   };
 
   return (
-    <div className={styles.chatContainer}>
-      
+    <div className={styles.chatContainer} data-hue={HUE[filter]} data-paid="false">
+
       {!isLoading && contentHtml && (
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-          <button 
-            onClick={() => setFilter('ALL')}
-            style={{ 
-              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
-              background: filter === 'ALL' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
-              color: 'white', cursor: 'pointer', transition: 'all 0.2s'
-            }}>🔥 전체 보기</button>
-          <button 
-            onClick={() => setFilter('LOVE')}
-            style={{ 
-              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
-              background: filter === 'LOVE' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
-              color: 'white', cursor: 'pointer', transition: 'all 0.2s'
-            }}>💕 연애만 보기</button>
-          <button 
-            onClick={() => setFilter('CAREER')}
-            style={{ 
-              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
-              background: filter === 'CAREER' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
-              color: 'white', cursor: 'pointer', transition: 'all 0.2s'
-            }}>💼 취업/타이밍 보기</button>
-          <button 
-            onClick={() => setFilter('QNA')}
-            style={{ 
-              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
-              background: filter === 'QNA' ? 'var(--glow-primary)' : 'rgba(255,255,255,0.05)',
-              color: 'white', cursor: 'pointer', transition: 'all 0.2s'
-            }}>💭 직접 질문하기</button>
-          <button 
-            onClick={() => setFilter('SOLO')}
-            style={{ 
-              padding: '6px 14px', borderRadius: '20px', border: '1px solid var(--border-color)', 
-              background: filter === 'SOLO' ? 'linear-gradient(135deg, hsl(330,70%,40%), hsl(280,60%,40%))' : 'rgba(255,255,255,0.05)',
-              color: 'white', cursor: 'pointer', transition: 'all 0.2s',
-              boxShadow: filter === 'SOLO' ? '0 0 14px hsl(310,70%,45%,0.5)' : 'none'
-            }}>💘 솔로 탈출</button>
+        <div className={styles.tabs}>
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setFilter(tab.id)}
+              className={`${styles.tab} ${filter === tab.id ? styles.tabActive : ''}`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       )}
 
@@ -212,7 +203,7 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
                     <span className={styles.avatar}>{msg.role === 'user' ? '👤' : '💬'}</span>
                     <span className={styles.sender}>{msg.role === 'user' ? '내담자:' : '이현:'}</span>
                   </div>
-                  <div className={styles.chatContent} dangerouslySetInnerHTML={{ __html: msg.contentHtml }} />
+                  <div className={`${styles.chatContent} report-body`} dangerouslySetInnerHTML={{ __html: msg.contentHtml }} />
                 </div>
               </div>
             ))}
@@ -243,23 +234,19 @@ export default function AnalysisReport({ contentHtml, isLoading, requestBody }: 
           </form>
         </div>
       ) : (
-        <div className={styles.chatBubbleContainer}>
-          <div className={styles.chatBubble}>
-            <div className={styles.chatHeader}>
-              <span className={styles.avatar}>💬</span>
-              <span className={styles.sender}>이현:</span>
-            </div>
-            
-            <div className={styles.chatContent} style={{ animation: 'fadeIn 0.5s ease-out' }}>
-              {currentLoading ? (
-                <div className={styles.typingIndicator}>
-                  <span>.</span><span>.</span><span>.</span> {loadingMessages[filter]}
-                </div>
-              ) : currentHtml ? (
-                 <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
-              ) : null}
-            </div>
+        <div className={styles.reportCard}>
+          <div className={styles.chatHeader}>
+            <span className={styles.avatar}>💬</span>
+            <span className={styles.sender}>이현</span>
           </div>
+
+          {currentLoading ? (
+            <div className={styles.typingIndicator}>
+              <span>.</span><span>.</span><span>.</span> {loadingMessages[filter]}
+            </div>
+          ) : currentHtml ? (
+            <div className="report-body" dangerouslySetInnerHTML={{ __html: currentHtml }} />
+          ) : null}
         </div>
       )}
 

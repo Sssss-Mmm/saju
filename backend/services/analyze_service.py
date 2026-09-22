@@ -6,17 +6,58 @@ from fastapi import HTTPException
 from models.schemas import AnalyzeRequest, QuestionRequest, SoloEscapeResponse, SoloMeeting, SoloPerson, SoloScript
 from core.config import settings
 
+_MARKUP = """
+      [출력 마크업 규칙 — 반드시 지킬 것]
+      - 순수 HTML만 출력한다. 마크다운 코드블록(```)은 절대 쓰지 않는다.
+      - 목록은 반드시 <ul>/<li>로 만든다. •, - 같은 기호로 직접 쓰지 않는다.
+      - 강조는 <strong>. class 속성은 아래 나열한 것만 사용한다.
+      - 섹션 제목 <h3> 바로 다음 줄에 한 줄 비유를 부제로 단다:
+        <p class="sub">"보석은 귀한데, 담을 상자가 없군."</p>
+      - 섹션의 핵심을 한 단어로 압축해 키워드 배너를 만든다:
+        <div class="kw">"구멍 난 황금 독"</div>
+        수치가 있으면: <div class="kw">"평가질 증후군"<span class="metric">💕 이성운: 75%</span></div>
+      - 키워드를 뒷받침하는 태그: <ul class="chips"><li>#압박</li><li>#명예</li></ul>
+      - 현황·진단 설명: <div class="diag"><strong>🔍 문제 진단</strong><ul><li>…</li></ul></div>
+      - 무료로 풀어주는 통찰: <div class="tip"><strong>💡 무료 인사이트</strong><p>…</p></div>
+      - 경고·금기: <div class="warn"><strong>⚠️ 절대 하면 안 되는 것</strong><p>…</p></div>
+      - 가장 값진 대목(정확한 시기, 구체적 실행 지침, 상대방의 특징)에는
+        premium 클래스를 함께 붙인다: <div class="warn premium">…</div>
+        전체 분량의 약 40%가 premium이어야 한다. 무료 구간만 읽어도 말이 되게 쓰되,
+        결정적인 정보는 premium 안에 둔다.
+"""
+
+
 class AnalysisService:
     def __init__(self, api_key: str | None = None):
         self.api_key = api_key or settings.OPENAI_API_KEY
         self.client = AsyncOpenAI(api_key=self.api_key) if self.api_key else None
 
     def _get_mock_data(self, name: str) -> str:
-        """Returns mock HTML data when OpenAI client is not available."""
+        """API 키가 없을 때 쓰는 mock. 실제 프롬프트가 내보내야 할 마크업과 동일한 형태다."""
         return f"""
-        <p>"반갑네, {name} 군. 자네 사주를 보니 마치 <strong>'용광로 속에 놓인 정교한 다이아몬드'</strong> 같군. 겉으로는 특유의 유연함과 평화를 말하지만, 속으로는 자신을 끊임없이 채찍질하는 <strong>완벽주의가 자네를 태우고 있어</strong>."</p>
-        <p>"남들은 자네를 '착하고 말 잘 듣는 사람'으로 보겠지만, 내 눈엔 언제든 폭발할 것 같은 <strong>예리한 칼날</strong>이 보이네. 자네가 지금 답답한 건 능력이 없어서가 아니야. 자네의 섬세한 기운을 담아낼 그릇이 부족해서 <strong>에너지가 안으로만 고이고 있기 때문</strong>이지."</p>
-        <p>"특히 <strong>2026년은 자네에게 '불의 시험'</strong>과 같은 해가 될 걸세. 관성(火)이 극에 달하는 이 시기를 어떻게 넘기느냐에 따라 자네는 <strong>명품 보석이 될 수도</strong>, 그냥 녹아버린 쇳덩이가 될 수도 있어. 그 갈림길을 내가 짚어주겠네."</p>
+        <h3>🔮 ① 타고난 그릇</h3>
+        <p class="sub">"용광로 속에 놓인 정교한 다이아몬드로군."</p>
+        <div class="kw">"과열된 완벽주의자"<span class="metric">🔥 신강도: 62%</span></div>
+        <ul class="chips"><li>#압박</li><li>#명예</li><li>#변화</li></ul>
+        <div class="diag">
+          <strong>🔍 현재 상황</strong>
+          <ul>
+            <li>겉으로는 유연하고 평화롭지만, 속으로는 자신을 끊임없이 채찍질하고 있네.</li>
+            <li>능력이 없어서 답답한 게 아니야. 기운을 담아낼 그릇이 부족해 <strong>에너지가 안으로만 고이고 있기 때문</strong>이지.</li>
+          </ul>
+        </div>
+        <div class="tip">
+          <strong>💡 무료 인사이트</strong>
+          <p>{name} 군은 '정밀함'과 '예술성'이 겹치는 자리에서만 빛나는 사람일세.</p>
+        </div>
+        <div class="warn premium">
+          <strong>⚠️ 절대 하면 안 되는 것</strong>
+          <p>2026년 관성(火)이 극에 달하는 시기에 홧김에 판을 엎으면, 그 뒤 2년을 통째로 헤매게 되네. 특히 <strong>6월에서 7월 사이</strong>가 고비일세.</p>
+        </div>
+        <div class="diag premium">
+          <strong>🔍 갈림길의 조건</strong>
+          <p>이 해를 어떻게 넘기느냐에 따라 명품 보석이 되거나, 그냥 녹아버린 쇳덩이가 되네. 그 갈림길을 내가 짚어주겠네.</p>
+        </div>
         """
 
     def _build_prompt(self, request: AnalyzeRequest) -> str:
@@ -27,7 +68,8 @@ class AnalysisService:
       
       [지시사항]
       - 말투: 단호하고 확신에 찬 어조. 사극풍의 연륜있고 정중하지만 위엄있는 말투.
-      - 포맷: 제공된 이모지(📌, 🔷, 👉, ✔, 🔥 등)와 HTML 태그를 적극적으로 활용하세요. 특히 항목을 나열할 때는 절대 기호(•, - 등)로 대충 쓰지 말고, 반드시 HTML의 <ul> 태그와 <li> 태그로 목록을 만드세요. 문단은 <p> 태그, 줄바꿈은 <br>, 강조는 <strong> 태그를 사용하세요.
+      - 포맷: 제공된 이모지(📌, 🔷, 👉, ✔, 🔥 등)를 적극 활용하세요.
+{_MARKUP}
       - 분석 구조: 반드시 아래의 6단계 구조를 엄격하게 따르고, 각 제목은 <h3> 태그로 작성하세요.
 
       <h3>📌 1. 자미두수 기준 — "인생 구조"</h3>
@@ -68,7 +110,7 @@ class AnalysisService:
 
       [지시사항]
       - 말투: 단호하고 확신에 찬 어조. 사극풍의 연륜있고 정중하지만 위엄있는 말투.
-      - 포맷: 반드시 HTML의 <ul>/<li>, <p>, <strong>, <h3> 태그를 사용하세요. 기호(•, -)로 목록을 쓰지 마세요.
+{_MARKUP}
       - 반드시 아래 5단계 구조를 빠짐없이 작성하세요.
 
       <h3>💕 1. 유년기 (0~20세) — 연애의 씨앗</h3>
@@ -106,7 +148,7 @@ class AnalysisService:
 
       [지시사항]
       - 말투: 단호하고 확신에 찬 어조. 사극풍의 연륜있고 정중하지만 위엄있는 말투.
-      - 포맷: 반드시 HTML의 <ul>/<li>, <p>, <strong>, <h3> 태그를 사용하세요. 기호(•, -)로 목록을 쓰지 마세요.
+{_MARKUP}
       - 반드시 아래 5단계 구조를 빠짐없이 작성하세요.
 
       <h3>💼 1. 유년기 (0~20세) — 커리어의 씨앗</h3>
@@ -146,7 +188,7 @@ class AnalysisService:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.75,
-                max_tokens=2000,
+                max_tokens=3000,
             )
             content = response.choices[0].message.content.strip()
             # 마크다운 블록(예: ```html ... ```)을 제거합니다.
@@ -186,7 +228,7 @@ class AnalysisService:
 
       [지시사항]
       - 말투: 단호하고 확신에 찬 어조. 사극풍의 연륜있고 정중하지만 위엄있는 말투.
-      - 포맷: 반드시 HTML 태그를 사용하세요. (<p>, <strong> 등 사용). 목록이 필요하면 <ul>, <li> 사용.
+{_MARKUP}
       - 두루뭉술한 말 대신, 명반에 근거하여 핵심만 정확히 짚어서 뼈때리는 조언을 해주세요.
       - 질문 내용에만 집중하여 대답하세요.
 

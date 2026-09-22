@@ -31,7 +31,7 @@
 
 .loadingText {
   font-size: 1.2rem;
-  color: hsl(320, 80%, 75%);
+  color: var(--sec, #c026d3);
   font-weight: 600;
 }
 
@@ -45,8 +45,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  background: linear-gradient(135deg, hsl(330, 70%, 18%) 0%, hsl(280, 60%, 15%) 100%);
-  border: 1px solid hsl(320, 60%, 35%);
+  background: linear-gradient(135deg, hsl(330, 100%, 97%) 0%, hsl(280, 100%, 97%) 100%);
+  border: 1px solid hsl(320, 60%, 88%);
   padding: 2.5rem 2rem;
   text-align: center;
 }
@@ -58,7 +58,7 @@
   transform: translateX(-50%);
   width: 300px;
   height: 200px;
-  background: radial-gradient(ellipse, hsl(320, 80%, 50%, 0.3), transparent 70%);
+  background: radial-gradient(ellipse, hsl(320, 80%, 60%, 0.14), transparent 70%);
   pointer-events: none;
 }
 
@@ -77,7 +77,7 @@
 .heroTitle {
   font-size: 1.75rem;
   font-weight: 800;
-  background: linear-gradient(90deg, hsl(340, 90%, 75%), hsl(290, 80%, 75%));
+  background: linear-gradient(90deg, hsl(340, 80%, 45%), hsl(290, 70%, 45%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -85,17 +85,18 @@
 }
 
 .heroSubtitle {
-  color: hsl(320, 40%, 70%);
+  color: hsl(320, 25%, 45%);
   font-size: 0.9rem;
   margin: 0;
 }
 
 /* ── 섹션 공통 ── */
 .section {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #fff;
+  border: 1px solid var(--line, #e6e8eb);
   border-radius: 16px;
   padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
 .sectionHeader {
@@ -112,7 +113,7 @@
 .sectionTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: hsl(320, 80%, 80%);
+  color: var(--sec, #c026d3);
   margin: 0;
   flex: 1;
 }
@@ -135,15 +136,15 @@
 }
 
 .meetingCard {
-  background: rgba(255, 100, 150, 0.06);
-  border: 1px solid rgba(255, 100, 150, 0.15);
+  background: #fff5f9;
+  border: 1px solid #f9cede;
   border-radius: 12px;
   padding: 1rem 1.25rem;
 }
 
 .meetingLabel {
   font-size: 0.75rem;
-  color: hsl(320, 60%, 65%);
+  color: hsl(320, 45%, 45%);
   font-weight: 600;
   display: block;
   margin-bottom: 0.4rem;
@@ -153,7 +154,7 @@
 
 .meetingValue {
   font-size: 0.95rem;
-  color: hsl(0, 0%, 88%);
+  color: var(--ink-soft, #4a5568);
   margin: 0;
   line-height: 1.5;
 }
@@ -163,8 +164,8 @@
   flex-shrink: 0;
   width: 180px;
   min-height: 160px;
-  background: linear-gradient(145deg, hsl(330, 40%, 14%), hsl(280, 40%, 12%));
-  border: 1px solid hsl(320, 40%, 30%);
+  background: linear-gradient(145deg, hsl(330, 100%, 97%), hsl(280, 100%, 97%));
+  border: 1px solid hsl(320, 45%, 88%);
   border-radius: 16px;
   padding: 1.25rem 1rem;
   display: flex;
@@ -187,7 +188,7 @@
 .appearanceLabel {
   font-size: 0.7rem;
   font-weight: 700;
-  color: hsl(320, 60%, 65%);
+  color: hsl(320, 45%, 45%);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
@@ -195,7 +196,7 @@
 
 .appearanceDesc {
   font-size: 0.82rem;
-  color: hsl(0, 0%, 82%);
+  color: var(--ink-soft, #4a5568);
   line-height: 1.65;
   margin: 0;
   text-align: left;
@@ -215,9 +216,9 @@
 }
 
 .personBadge {
-  background: rgba(255, 100, 150, 0.1);
-  border: 1px solid rgba(255, 100, 150, 0.25);
-  color: hsl(330, 80%, 75%);
+  background: var(--sec-tint, #fbeafe);
+  border: 1px solid hsl(320, 60%, 88%);
+  color: var(--sec, #c026d3);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -225,7 +226,7 @@
 }
 
 .personInfoBlock {
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8f9fb;
   border-radius: 10px;
   padding: 0.75rem 1rem;
 }
@@ -233,7 +234,7 @@
 .personInfoLabel {
   font-size: 0.72rem;
   font-weight: 700;
-  color: hsl(320, 60%, 65%);
+  color: hsl(320, 45%, 45%);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0 0 0.35rem;
@@ -241,7 +242,7 @@
 
 .personInfoText {
   font-size: 0.9rem;
-  color: hsl(0, 0%, 82%);
+  color: var(--ink-soft, #4a5568);
   margin: 0;
   line-height: 1.6;
 }
@@ -257,15 +258,15 @@
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  background: rgba(255, 150, 100, 0.05);
-  border: 1px solid rgba(255, 150, 100, 0.15);
+  background: #fff8f3;
+  border: 1px solid #fbdcc4;
   border-radius: 12px;
   padding: 1rem 1.25rem;
 }
 
 .scriptBackup {
-  background: rgba(255, 200, 50, 0.05);
-  border-color: rgba(255, 200, 50, 0.2);
+  background: #fffbeb;
+  border-color: #fae9b0;
 }
 
 .scriptStepNum {
@@ -295,19 +296,19 @@
 .scriptLabel {
   font-size: 0.72rem;
   font-weight: 700;
-  color: hsl(30, 80%, 70%);
+  color: hsl(25, 70%, 40%);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0 0 0.4rem;
 }
 
 .scriptBackup .scriptLabel {
-  color: hsl(45, 80%, 70%);
+  color: hsl(38, 75%, 35%);
 }
 
 .scriptLine {
   font-size: 0.925rem;
-  color: hsl(0, 0%, 85%);
+  color: var(--ink-soft, #4a5568);
   margin: 0;
   line-height: 1.6;
 }
@@ -315,7 +316,7 @@
 .scriptArrow {
   text-align: center;
   font-size: 1.1rem;
-  color: hsl(320, 40%, 50%);
+  color: hsl(320, 35%, 68%);
   padding: 0 0 0 1rem;
 }
 
@@ -324,8 +325,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  background: linear-gradient(135deg, hsl(350, 60%, 14%), hsl(300, 50%, 12%));
-  border: 1px solid hsl(350, 50%, 30%);
+  background: linear-gradient(135deg, hsl(350, 100%, 97%), hsl(300, 100%, 97%));
+  border: 1px solid hsl(350, 60%, 89%);
   padding: 2rem 1.75rem;
 }
 
@@ -335,7 +336,7 @@
   right: -20px;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, hsl(350, 80%, 50%, 0.2), transparent 70%);
+  background: radial-gradient(circle, hsl(350, 80%, 60%, 0.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -347,7 +348,7 @@
 
 .motivationText {
   font-size: 1rem;
-  color: hsl(0, 0%, 88%);
+  color: var(--ink-soft, #4a5568);
   margin: 0 0 1rem;
   line-height: 1.75;
   font-style: italic;
@@ -359,7 +360,7 @@
 
 .motivationSigned {
   font-size: 0.85rem;
-  color: hsl(350, 60%, 60%);
+  color: hsl(350, 55%, 45%);
   font-weight: 600;
 }
 

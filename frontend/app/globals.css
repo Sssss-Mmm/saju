@@ -68,3 +68,244 @@ button:hover {
   box-shadow: 0 0 15px var(--glow-primary);
   transform: translateY(-2px);
 }
+
+/* =========================================================
+   결과 리포트 — 라이트 서피스
+   랜딩/입력은 다크 유지, 결과 본문만 라이트로 전환한다.
+   ponytail: 테마 프로바이더 없이 래퍼 클래스 하나로 처리.
+   ========================================================= */
+
+.report-surface {
+  --sec: #4f46e5;          /* 섹션 강조색 (탭별로 교체) */
+  --sec-tint: #eef2ff;     /* 섹션 연한 배경 */
+  --ink: #1a202c;
+  --ink-soft: #4a5568;
+  --ink-mute: #718096;
+  --card: #ffffff;
+  --ground: #f4f5f7;
+  --line: #e6e8eb;
+
+  background: var(--ground);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 96px; /* 하단 고정 CTA 바 자리 */
+
+  /* 다크 전제로 짜인 기존 토큰을 이 안에서만 라이트로 덮는다.
+     덕분에 인라인 스타일로 var()를 쓰던 컴포넌트(ZiweiChart 등)는 손대지 않아도 따라온다. */
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-mute);
+  --text-highlight: var(--ink);
+  --border-color: var(--line);
+  --glass-bg: var(--card);
+  --glass-border: var(--line);
+  --glow-primary: var(--sec);
+  --glow-gold: var(--sec);
+}
+
+/* 리포트 화면에서는 바탕까지 라이트로 (내용이 짧아도 아래가 검게 비치지 않게) */
+body:has(.report-surface) {
+  background: #f4f5f7;
+  background-image: none;
+}
+
+/* 라이트 서피스 안에서는 유리판이 아니라 그냥 흰 카드 */
+.report-surface .glass-panel {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* 탭이 바뀌면 강조색이 통째로 갈린다 (레퍼런스: 재물=앰버, 진로=블루, 연애=핑크 …) */
+[data-hue="love"]   { --sec: #e5326f; --sec-tint: #ffeaf1; }
+[data-hue="career"] { --sec: #2563eb; --sec-tint: #eaf1ff; }
+[data-hue="wealth"] { --sec: #d97706; --sec-tint: #fff7e3; }
+[data-hue="mind"]   { --sec: #7c3aed; --sec-tint: #f5edff; }
+[data-hue="qna"]    { --sec: #475569; --sec-tint: #eef1f5; }
+[data-hue="solo"]   { --sec: #c026d3; --sec-tint: #fbeafe; }
+
+/* ---------- LLM 출력 본문 ----------
+   주입된 HTML이라 CSS Module이 안 먹으므로 전역 선택자로 둔다.
+   백엔드 프롬프트가 내보내는 클래스와 1:1로 대응한다. */
+
+.report-body {
+  font-size: 1.02rem;
+  line-height: 1.82;
+  color: var(--ink-soft);
+  word-break: keep-all;
+}
+
+.report-body h3 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 40px 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.report-body h3:first-child { margin-top: 0; }
+
+/* h3 바로 뒤 인용 부제 */
+.report-body .sub {
+  font-style: italic;
+  color: var(--ink-mute);
+  margin: 0 0 20px;
+  font-size: 1.02rem;
+}
+
+.report-body p { margin: 0 0 16px; }
+
+.report-body strong {
+  color: var(--sec);
+  font-weight: 800;
+}
+
+.report-body ul {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.report-body li {
+  position: relative;
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.report-body li::before {
+  content: "•";
+  position: absolute;
+  left: -14px;
+  color: var(--sec);
+  font-weight: 800;
+}
+
+/* 키워드 배너 — 좌측 굵은 바 + 연한 틴트 */
+.report-body .kw {
+  background: var(--sec-tint);
+  border-left: 5px solid var(--sec);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 0 0 20px;
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: var(--sec);
+  letter-spacing: -0.01em;
+}
+
+.report-body .kw .metric {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* 진단 박스 — 중립 회색 */
+.report-body .diag {
+  background: #f7f8fa;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin: 0 0 16px;
+}
+
+/* 무료 인사이트 — 초록 */
+.report-body .tip {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 0 0 16px;
+}
+
+/* 경고 — 빨강 */
+.report-body .warn {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 0 0 16px;
+}
+
+.report-body .diag > strong:first-child,
+.report-body .tip > strong:first-child,
+.report-body .warn > strong:first-child {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.report-body .tip > strong:first-child  { color: #15803d; }
+.report-body .warn > strong:first-child { color: #dc2626; }
+
+.report-body .diag :last-child,
+.report-body .tip :last-child,
+.report-body .warn :last-child { margin-bottom: 0; }
+
+/* 해시태그 칩 */
+.report-body .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.report-body .chips li {
+  margin: 0;
+  padding: 7px 15px;
+  background: var(--sec-tint);
+  color: var(--sec);
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.report-body .chips li::before { content: none; }
+
+/* ---------- 잠금 / 블러 ----------
+   미결제 상태에서만 흐려진다. 결제 붙으면 data-paid="true"로 해제.
+   ponytail: 서버가 본문을 다 내려보내므로 진짜 페이월이 아니다.
+   FR-PY 붙일 때 잠금 구간은 서버에서 잘라 보내야 한다. */
+
+.report-body .premium { position: relative; }
+
+/* filter:blur()는 ::after 뱃지까지 흐려버리므로 텍스트만 가리는 방식을 쓴다. */
+[data-paid="false"] .report-body .premium,
+[data-paid="false"] .report-body .premium strong {
+  color: transparent;
+  text-shadow: 0 0 9px rgba(74, 85, 104, 0.6);
+  user-select: none;
+  pointer-events: none;
+}
+
+[data-paid="false"] .report-body .premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+[data-paid="false"] .report-body .premium::after {
+  content: "🔒 잠금됨";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: #713f12;
+  text-shadow: none;
+  background: #facc15;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .report-body { font-size: 0.98rem; }
+  .report-body h3 { font-size: 1.32rem; margin-top: 32px; }
+  .report-body .kw { font-size: 1.15rem; padding: 16px 18px; }
+  .report-body .diag,
+  .report-body .tip,
+  .report-body .warn { padding: 16px 18px; }
+}

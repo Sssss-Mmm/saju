@@ -32,7 +32,7 @@ export default function ZiweiChart({ data }: { data: any }) {
   const [selectedPalace, setSelectedPalace] = useState<typeof palaces[0] | null>(null);
 
   return (
-    <section className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <section className="glass-panel" style={{ padding: 'clamp(1rem, 4vw, 2rem)', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
         <h2 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem', color: 'var(--text-highlight)' }}>
           자미두수 명반 (궁을 클릭해보세요)
@@ -41,10 +41,11 @@ export default function ZiweiChart({ data }: { data: any }) {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gridTemplateRows: 'repeat(4, 150px)',
+          gridTemplateRows: 'repeat(4, minmax(108px, auto))',
           gap: '8px',
           marginTop: '2rem',
-          position: 'relative'
+          position: 'relative',
+          minWidth: 0
         }}>
           {gridPalaces.map((palace, i) => {
             if (palace.isCenter) {
@@ -60,16 +61,17 @@ export default function ZiweiChart({ data }: { data: any }) {
                   border: isSelected ? '2px solid var(--glow-gold)' : '1px solid var(--border-color)',
                   borderRadius: '8px',
                   padding: '8px',
-                  background: isSelected ? 'rgba(255, 215, 0, 0.1)' : 'rgba(255,255,255,0.02)',
+                  background: isSelected ? 'var(--sec-tint)' : '#fafbfc',
                   display: 'flex',
                   flexDirection: 'column',
+                  minWidth: 0,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  boxShadow: isSelected ? '0 0 15px rgba(255,215,0,0.2)' : 'none',
+                  boxShadow: 'none',
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: 'bold', color: isSelected ? 'var(--glow-gold)' : 'var(--text-primary)' }}>{palace.title}</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>{palace.name}궁</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2px', marginBottom: '8px' }}>
+                  <span style={{ fontWeight: 'bold', fontSize: '0.92rem', color: isSelected ? 'var(--sec)' : 'var(--text-primary)' }}>{palace.title}</span>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{palace.name}궁</span>
                 </div>
                 <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: '4px', alignContent: 'flex-start' }}>
                   {palace.stars.map((star) => (
@@ -77,9 +79,10 @@ export default function ZiweiChart({ data }: { data: any }) {
                       padding: '2px 6px', 
                       borderRadius: '4px', 
                       fontSize: '0.8rem',
-                      background: 'rgba(138, 43, 226, 0.2)',
-                      border: '1px solid var(--glow-primary)',
-                      color: 'var(--text-primary)'
+                      background: 'var(--sec-tint)',
+                      border: '1px solid var(--sec)',
+                      color: 'var(--sec)',
+                      fontWeight: 700
                     }}>{star}</span>
                   ))}
                 </div>
@@ -98,13 +101,12 @@ export default function ZiweiChart({ data }: { data: any }) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(0,0,0,0.3)',
-            border: '1px solid var(--glow-gold)',
+            background: 'var(--sec-tint)',
+            border: '1px solid var(--sec)',
             borderRadius: '12px',
-            boxShadow: '0 0 20px var(--glow-gold) inset',
             pointerEvents: 'none',
           }}>
-            <h3 className="title-gradient" style={{ fontSize: '2rem', margin: 0 }}>천기누설</h3>
+            <h3 style={{ fontSize: '1.7rem', margin: 0, color: 'var(--sec)', letterSpacing: '-0.02em' }}>천기누설</h3>
             <p style={{ color: 'var(--text-secondary)' }}>{data?.name || "사용자"}의 명반</p>
           </div>
         </div>
@@ -113,12 +115,12 @@ export default function ZiweiChart({ data }: { data: any }) {
       {selectedPalace && (
         <div style={{
           padding: '1.5rem',
-          background: 'rgba(255,215,0,0.05)',
-          border: '1px solid var(--glow-gold)',
+          background: 'var(--sec-tint)',
+          border: '1px solid var(--sec)',
           borderRadius: '12px',
           animation: 'fadeIn 0.3s ease-out'
         }}>
-          <h3 style={{ color: 'var(--glow-gold)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h3 style={{ color: 'var(--sec)', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
             ✨ {selectedPalace.title} ({selectedPalace.name}궁)
           </h3>
           <p style={{ margin: 0, color: 'var(--text-primary)', lineHeight: '1.6' }}>

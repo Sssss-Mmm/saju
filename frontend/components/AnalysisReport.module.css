@@ -57,9 +57,9 @@
 }
 
 .typingIndicator {
-  background-color: #1a202c;
-  border-radius: 16px;
-  border: 1px solid #ecc94b;
+  background-color: #f7f8fa;
+  border-radius: 12px;
+  border: 1px solid var(--line, #e6e8eb);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -159,4 +159,68 @@
   max-height: 60vh;
   overflow-y: auto;
   padding-right: 10px;
+}
+
+
+/* ---------- 탭 ---------- */
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.tab {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line, #e6e8eb);
+  background: #fff;
+  color: var(--ink-soft, #4a5568);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab:hover {
+  background: var(--sec-tint, #eef2ff);
+  color: var(--sec, #4f46e5);
+  box-shadow: none;
+  transform: none;
+}
+
+.tabActive,
+.tabActive:hover {
+  background: var(--sec, #4f46e5);
+  border-color: var(--sec, #4f46e5);
+  color: #fff;
+}
+
+/* ---------- 리포트 본문 카드 ---------- */
+.reportCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.reportCard .chatHeader {
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line, #e6e8eb);
+}
+
+/* ---------- 하단 요약 카드 ---------- */
+.darkActionCard {
+  background: #1a202c;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+@media (max-width: 600px) {
+  .reportCard { padding: 22px 18px; }
+  .userBubbleContainer { margin-left: 8%; }
+  .aiBubbleContainer { margin-right: 8%; }
+  .tab { padding: 8px 13px; font-size: 0.9rem; }
 }

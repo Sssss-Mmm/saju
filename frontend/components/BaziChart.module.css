@@ -161,3 +161,31 @@
   font-size: 0.85rem;
   font-weight: 600;
 }
+
+/* 좁은 화면에서 칸이 좁아져 '정재'가 두 줄로 쪼개지는 것 방지 */
+.twelveGodsLabel {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .whiteCardContainer { padding: 24px 16px; }
+
+  .grid {
+    grid-template-columns: 40px repeat(4, 1fr);
+    column-gap: 7px;
+    min-width: 0;
+  }
+
+  .rowLabel { padding-right: 6px; font-size: 0.78rem; }
+  .colHeader { font-size: 0.85rem; }
+
+  .darkPill {
+    padding: 7px 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .elementBox { padding: 10px 0; }
+  .koChar, .hanjaChar { font-size: 1rem; }
+  .twelveGodsSection { padding: 8px 0; gap: 10px; }
+}
