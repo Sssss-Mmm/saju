@@ -1,31 +1,247 @@
+/* =========================================================
+   테마 토큰
+   라이트가 기본값. 다크는 (1) 시스템 설정 또는 (2) data-theme="dark" 로 켜진다.
+   토글이 시스템 설정을 이기도록 다크 미디어쿼리에 :not([data-theme="light"]) 가드를 건다.
+   색은 전부 여기서만 정의하고, 컴포넌트는 토큰만 참조한다.
+   ========================================================= */
+
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: rgba(255, 255, 255, 0.03);
-  --bg-tertiary: rgba(255, 255, 255, 0.08);
-  --text-primary: #e0e0ff;
-  --text-secondary: #a0a0c0;
+  color-scheme: light;
+
+  --bg: #f4f5f7;
+  --bg-elev: #ffffff;
+  --bg-sunken: #f7f8fa;
+  --bg-input: #ffffff;
+
+  --text: #1a202c;
+  --text-soft: #4a5568;
+  --text-mute: #718096;
+  --on-accent: #ffffff;
+
+  --line: #e6e8eb;
+  --line-strong: #d3d7dd;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 6px 18px rgba(0, 0, 0, 0.18);
+
+  /* 강조색: 색상(--h)·채도(--s)는 섹션별로, 명도(--sec-l)는 테마별로 갈린다 */
+  --sec-l: 45%;
+  --sec: hsl(var(--h, 255) var(--s, 65%) var(--sec-l));
+  --sec-tint: color-mix(in srgb, var(--sec) 11%, var(--bg-elev));
+
+  /* 시맨틱 콜아웃 */
+  --ok-bg: #f0fdf4;
+  --ok-line: #86efac;
+  --ok-text: #15803d;
+  --warn-bg: #fef2f2;
+  --warn-line: #fca5a5;
+  --warn-text: #dc2626;
+  --note-bg: #fff8f3;
+  --note-line: #fbdcc4;
+  --note-text: hsl(25 70% 40%);
+  --alt-bg: #fffbeb;
+  --alt-line: #fae9b0;
+  --alt-text: hsl(38 75% 35%);
+
+  /* 잠금 처리 */
+  --lock-bg: #facc15;
+  --lock-text: #713f12;
+  --veil: rgba(255, 255, 255, 0.35);
+  --redact: rgba(74, 85, 104, 0.6);
+
+  /* 오행 */
+  --el-wood: #bdf2cc;
+  --el-wood-ink: #2f855a;
+  --el-fire: #fed7d7;
+  --el-fire-ink: #c53030;
+  --el-earth: #fef08a;
+  --el-earth-ink: #b45309;
+  --el-metal: #edf2f7;
+  --el-metal-ink: #718096;
+  --el-water: #bee3f8;
+  --el-water-ink: #2b6cb0;
+  --hanja: #e53e3e;
+  --pill-bg: #3f4c63;
+  --pill-text: #ffffff;
+
+  /* 랜딩 연출 — 라이트에서는 은은하게 */
+  --aura-1: rgba(124, 58, 237, 0.10);
+  --aura-2: rgba(37, 99, 235, 0.10);
+  --brand-grad: linear-gradient(135deg, #7c3aed, #c026d3, #7c3aed);
+  --btn-grad: linear-gradient(135deg, #6d28d9, #4c1d95);
+  --btn-grad-hover: linear-gradient(135deg, #7c3aed, #5b21b6);
+
+  /* 카카오 옐로는 브랜드 고정색이라 테마와 무관하다 */
+  --kakao: #fee500;
+  --kakao-hover: #f5d900;
+  --kakao-text: #1a1a1a;
+
+  /* 레거시 별칭 — 인라인 var()를 쓰는 컴포넌트(ZiweiChart 등) 호환용 */
+  --bg-primary: var(--bg);
+  --bg-secondary: var(--bg-sunken);
+  --bg-tertiary: var(--bg-sunken);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-mute);
+  --text-highlight: var(--text);
+  --border-color: var(--line);
+  --glass-bg: var(--bg-elev);
+  --glass-border: var(--line);
+  --glow-primary: var(--sec);
+  --glow-gold: var(--sec);
+}
+
+/* 시스템이 다크일 때 (사용자가 라이트를 명시적으로 고르지 않은 경우) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #0a0a0f;
+    --bg-elev: #15151f;
+    --bg-sunken: rgba(255, 255, 255, 0.045);
+    --bg-input: rgba(0, 0, 0, 0.25);
+
+    --text: #e9e9f6;
+    --text-soft: #c2c2d6;
+    --text-mute: #9292ad;
+
+    --line: rgba(255, 255, 255, 0.12);
+    --line-strong: rgba(255, 255, 255, 0.2);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.45);
+    --shadow-float: 0 6px 20px rgba(0, 0, 0, 0.5);
+
+    --sec-l: 72%;
+    --on-accent: #14141d;  /* 다크에선 강조색이 밝아지므로 그 위 글자는 어둡게 */
+
+    --ok-bg: rgba(34, 197, 94, 0.12);
+    --ok-line: rgba(74, 222, 128, 0.35);
+    --ok-text: #6ee7a0;
+    --warn-bg: rgba(239, 68, 68, 0.12);
+    --warn-line: rgba(248, 113, 113, 0.35);
+    --warn-text: #fca5a5;
+    --note-bg: rgba(251, 146, 60, 0.10);
+    --note-line: rgba(251, 146, 60, 0.28);
+    --note-text: #fbbf7a;
+    --alt-bg: rgba(250, 204, 21, 0.10);
+    --alt-line: rgba(250, 204, 21, 0.28);
+    --alt-text: #fde047;
+
+    --lock-bg: #facc15;
+    --lock-text: #422006;
+    --veil: rgba(10, 10, 15, 0.35);
+    --redact: rgba(200, 200, 225, 0.55);
+
+    --el-wood: #1e4634;
+    --el-wood-ink: #7ee2ab;
+    --el-fire: #4d2230;
+    --el-fire-ink: #ff9fa8;
+    --el-earth: #4a3c14;
+    --el-earth-ink: #fbd45e;
+    --el-metal: #2b3240;
+    --el-metal-ink: #b9c4d4;
+    --el-water: #17364f;
+    --el-water-ink: #86c5f0;
+    --hanja: #ff8a8a;
+    --pill-bg: #2b3546;
+    --pill-text: #e9e9f6;
+
+    --aura-1: rgba(70, 20, 100, 0.4);
+    --aura-2: rgba(20, 40, 100, 0.4);
+    --brand-grad: linear-gradient(135deg, #d4af37, #fef08a, #d4af37);
+    --btn-grad: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.8));
+    --btn-grad-hover: linear-gradient(135deg, rgba(158, 63, 246, 0.8), rgba(95, 20, 150, 1));
+
+    --text-highlight: #d4af37;
+  }
+}
+
+/* 토글로 다크를 명시한 경우 — 위 블록과 동일한 값 */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0a0a0f;
+  --bg-elev: #15151f;
+  --bg-sunken: rgba(255, 255, 255, 0.045);
+  --bg-input: rgba(0, 0, 0, 0.25);
+
+  --text: #e9e9f6;
+  --text-soft: #c2c2d6;
+  --text-mute: #9292ad;
+
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 6px 20px rgba(0, 0, 0, 0.5);
+
+  --sec-l: 72%;
+  --on-accent: #14141d;  /* 다크에선 강조색이 밝아지므로 그 위 글자는 어둡게 */
+
+  --ok-bg: rgba(34, 197, 94, 0.12);
+  --ok-line: rgba(74, 222, 128, 0.35);
+  --ok-text: #6ee7a0;
+  --warn-bg: rgba(239, 68, 68, 0.12);
+  --warn-line: rgba(248, 113, 113, 0.35);
+  --warn-text: #fca5a5;
+  --note-bg: rgba(251, 146, 60, 0.10);
+  --note-line: rgba(251, 146, 60, 0.28);
+  --note-text: #fbbf7a;
+  --alt-bg: rgba(250, 204, 21, 0.10);
+  --alt-line: rgba(250, 204, 21, 0.28);
+  --alt-text: #fde047;
+
+  --lock-bg: #facc15;
+  --lock-text: #422006;
+  --veil: rgba(10, 10, 15, 0.35);
+  --redact: rgba(200, 200, 225, 0.55);
+
+  --el-wood: #1e4634;
+  --el-wood-ink: #7ee2ab;
+  --el-fire: #4d2230;
+  --el-fire-ink: #ff9fa8;
+  --el-earth: #4a3c14;
+  --el-earth-ink: #fbd45e;
+  --el-metal: #2b3240;
+  --el-metal-ink: #b9c4d4;
+  --el-water: #17364f;
+  --el-water-ink: #86c5f0;
+  --hanja: #ff8a8a;
+  --pill-bg: #2b3546;
+  --pill-text: #e9e9f6;
+
+  --aura-1: rgba(70, 20, 100, 0.4);
+  --aura-2: rgba(20, 40, 100, 0.4);
+  --brand-grad: linear-gradient(135deg, #d4af37, #fef08a, #d4af37);
+  --btn-grad: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(75, 0, 130, 0.8));
+  --btn-grad-hover: linear-gradient(135deg, rgba(158, 63, 246, 0.8), rgba(95, 20, 150, 1));
+
   --text-highlight: #d4af37;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(20, 20, 30, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glow-primary: rgba(138, 43, 226, 0.4);
-  --glow-gold: rgba(212, 175, 55, 0.4);
+}
+
+/* 섹션별 강조 색상 — 명도는 테마가 정하므로 색상/채도만 지정한다 */
+[data-hue="love"]   { --h: 340; --s: 78%; }
+[data-hue="career"] { --h: 221; --s: 78%; }
+[data-hue="wealth"] { --h: 35;  --s: 82%; }
+[data-hue="mind"]   { --h: 265; --s: 72%; }
+[data-hue="qna"]    { --h: 215; --s: 20%; }
+[data-hue="solo"]   { --h: 292; --s: 75%; }
+
+/* =========================================================
+   기본 요소
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(70, 20, 100, 0.4), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(20, 40, 100, 0.4), transparent 25%);
-  color: var(--text-primary);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 50%, var(--aura-1), transparent 25%),
+    radial-gradient(circle at 85% 30%, var(--aura-2), transparent 25%);
+  background-attachment: fixed;
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   min-height: 100vh;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 a {
@@ -35,93 +251,61 @@ a {
 
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: var(--shadow-card);
+}
+
+/* 다크에서만 유리판 느낌을 준다 — 라이트에서는 그냥 흰 카드 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .glass-panel {
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+:root[data-theme="dark"] .glass-panel {
+  background: rgba(20, 20, 30, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .title-gradient {
-  background: linear-gradient(135deg, #d4af37, #fef08a, #d4af37);
+  background: var(--brand-grad);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 }
 
 button {
   cursor: pointer;
-  border: none;
-  background: linear-gradient(135deg, rgba(138,43,226,0.6), rgba(75,0,130,0.8));
-  color: white;
+  background: var(--btn-grad);
+  color: #fff;
   padding: 12px 24px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid var(--line-strong);
   transition: all 0.3s ease;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
 button:hover {
-  background: linear-gradient(135deg, rgba(158,63,246,0.8), rgba(95,20,150,1));
-  box-shadow: 0 0 15px var(--glow-primary);
+  background: var(--btn-grad-hover);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--sec) 45%, transparent);
   transform: translateY(-2px);
 }
 
 /* =========================================================
-   결과 리포트 — 라이트 서피스
-   랜딩/입력은 다크 유지, 결과 본문만 라이트로 전환한다.
-   ponytail: 테마 프로바이더 없이 래퍼 클래스 하나로 처리.
+   결과 리포트 레이아웃
    ========================================================= */
 
 .report-surface {
-  --sec: #4f46e5;          /* 섹션 강조색 (탭별로 교체) */
-  --sec-tint: #eef2ff;     /* 섹션 연한 배경 */
-  --ink: #1a202c;
-  --ink-soft: #4a5568;
-  --ink-mute: #718096;
-  --card: #ffffff;
-  --ground: #f4f5f7;
-  --line: #e6e8eb;
-
-  background: var(--ground);
-  color: var(--ink);
+  --h: 265;
+  --s: 72%;
   min-height: 100vh;
   padding-bottom: 96px; /* 하단 고정 CTA 바 자리 */
-
-  /* 다크 전제로 짜인 기존 토큰을 이 안에서만 라이트로 덮는다.
-     덕분에 인라인 스타일로 var()를 쓰던 컴포넌트(ZiweiChart 등)는 손대지 않아도 따라온다. */
-  --text-primary: var(--ink);
-  --text-secondary: var(--ink-mute);
-  --text-highlight: var(--ink);
-  --border-color: var(--line);
-  --glass-bg: var(--card);
-  --glass-border: var(--line);
-  --glow-primary: var(--sec);
-  --glow-gold: var(--sec);
 }
-
-/* 리포트 화면에서는 바탕까지 라이트로 (내용이 짧아도 아래가 검게 비치지 않게) */
-body:has(.report-surface) {
-  background: #f4f5f7;
-  background-image: none;
-}
-
-/* 라이트 서피스 안에서는 유리판이 아니라 그냥 흰 카드 */
-.report-surface .glass-panel {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-}
-
-/* 탭이 바뀌면 강조색이 통째로 갈린다 (레퍼런스: 재물=앰버, 진로=블루, 연애=핑크 …) */
-[data-hue="love"]   { --sec: #e5326f; --sec-tint: #ffeaf1; }
-[data-hue="career"] { --sec: #2563eb; --sec-tint: #eaf1ff; }
-[data-hue="wealth"] { --sec: #d97706; --sec-tint: #fff7e3; }
-[data-hue="mind"]   { --sec: #7c3aed; --sec-tint: #f5edff; }
-[data-hue="qna"]    { --sec: #475569; --sec-tint: #eef1f5; }
-[data-hue="solo"]   { --sec: #c026d3; --sec-tint: #fbeafe; }
 
 /* ---------- LLM 출력 본문 ----------
    주입된 HTML이라 CSS Module이 안 먹으므로 전역 선택자로 둔다.
@@ -130,14 +314,14 @@ body:has(.report-surface) {
 .report-body {
   font-size: 1.02rem;
   line-height: 1.82;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   word-break: keep-all;
 }
 
 .report-body h3 {
   font-size: 1.55rem;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--text);
   margin: 40px 0 6px;
   letter-spacing: -0.02em;
 }
@@ -147,7 +331,7 @@ body:has(.report-surface) {
 /* h3 바로 뒤 인용 부제 */
 .report-body .sub {
   font-style: italic;
-  color: var(--ink-mute);
+  color: var(--text-mute);
   margin: 0 0 20px;
   font-size: 1.02rem;
 }
@@ -199,27 +383,27 @@ body:has(.report-surface) {
   font-weight: 700;
 }
 
-/* 진단 박스 — 중립 회색 */
+/* 진단 박스 — 중립 */
 .report-body .diag {
-  background: #f7f8fa;
+  background: var(--bg-sunken);
   border-radius: 12px;
   padding: 20px 22px;
   margin: 0 0 16px;
 }
 
-/* 무료 인사이트 — 초록 */
+/* 무료 인사이트 */
 .report-body .tip {
-  background: #f0fdf4;
-  border: 1px solid #86efac;
+  background: var(--ok-bg);
+  border: 1px solid var(--ok-line);
   border-radius: 12px;
   padding: 18px 22px;
   margin: 0 0 16px;
 }
 
-/* 경고 — 빨강 */
+/* 경고 */
 .report-body .warn {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
   border-radius: 12px;
   padding: 18px 22px;
   margin: 0 0 16px;
@@ -233,8 +417,8 @@ body:has(.report-surface) {
   font-size: 1.1rem;
 }
 
-.report-body .tip > strong:first-child  { color: #15803d; }
-.report-body .warn > strong:first-child { color: #dc2626; }
+.report-body .tip > strong:first-child  { color: var(--ok-text); }
+.report-body .warn > strong:first-child { color: var(--warn-text); }
 
 .report-body .diag :last-child,
 .report-body .tip :last-child,
@@ -263,7 +447,7 @@ body:has(.report-surface) {
 .report-body .chips li::before { content: none; }
 
 /* ---------- 잠금 / 블러 ----------
-   미결제 상태에서만 흐려진다. 결제 붙으면 data-paid="true"로 해제.
+   미결제 상태에서만 가려진다. 결제 붙으면 data-paid="true"로 해제.
    ponytail: 서버가 본문을 다 내려보내므로 진짜 페이월이 아니다.
    FR-PY 붙일 때 잠금 구간은 서버에서 잘라 보내야 한다. */
 
@@ -273,7 +457,7 @@ body:has(.report-surface) {
 [data-paid="false"] .report-body .premium,
 [data-paid="false"] .report-body .premium strong {
   color: transparent;
-  text-shadow: 0 0 9px rgba(74, 85, 104, 0.6);
+  text-shadow: 0 0 9px var(--redact);
   user-select: none;
   pointer-events: none;
 }
@@ -283,7 +467,7 @@ body:has(.report-surface) {
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--veil);
 }
 
 [data-paid="false"] .report-body .premium::after {
@@ -291,9 +475,9 @@ body:has(.report-surface) {
   position: absolute;
   top: 10px;
   right: 12px;
-  color: #713f12;
+  color: var(--lock-text);
   text-shadow: none;
-  background: #facc15;
+  background: var(--lock-bg);
   font-size: 0.85rem;
   font-weight: 800;
   padding: 5px 12px;

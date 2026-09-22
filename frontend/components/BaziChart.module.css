@@ -1,9 +1,10 @@
 .whiteCardContainer {
-  background-color: #ffffff;
+  background-color: var(--bg-elev);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 32px 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  color: #333;
+  box-shadow: var(--shadow-card);
+  color: var(--text-soft);
 }
 
 .header {
@@ -15,12 +16,12 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 8px 0;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #888;
+  color: var(--text-mute);
   margin: 0;
 }
 
@@ -28,7 +29,7 @@
   overflow-x: auto;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--line);
 }
 
 .grid {
@@ -42,7 +43,7 @@
 
 .rowLabel {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-mute);
   text-align: right;
   padding-right: 12px;
   font-weight: 500;
@@ -52,7 +53,7 @@
   text-align: center;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #444;
+  color: var(--text-soft);
 }
 
 .cell {
@@ -61,8 +62,8 @@
 }
 
 .darkPill {
-  background-color: #3f4c63;
-  color: white;
+  background-color: var(--pill-bg);
+  color: var(--pill-text);
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -95,13 +96,13 @@
 .koChar {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #111;
+  color: var(--text);
 }
 
 .hanjaChar {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #e53e3e;
+  color: var(--hanja);
 }
 
 .elementText {
@@ -111,29 +112,29 @@
 
 /* Element Colors */
 .wood {
-  background-color: #bdf2cc;
+  background-color: var(--el-wood);
 }
-.wood .elementText { color: #2f855a; }
+.wood .elementText { color: var(--el-wood-ink); }
 
 .fire {
-  background-color: #fed7d7;
+  background-color: var(--el-fire);
 }
-.fire .elementText { color: #c53030; }
+.fire .elementText { color: var(--el-fire-ink); }
 
 .earth {
-  background-color: #fef08a;
+  background-color: var(--el-earth);
 }
-.earth .elementText { color: #b45309; }
+.earth .elementText { color: var(--el-earth-ink); }
 
 .metal {
-  background-color: #edf2f7;
+  background-color: var(--el-metal);
 }
-.metal .elementText { color: #718096; }
+.metal .elementText { color: var(--el-metal-ink); }
 
 .water {
-  background-color: #bee3f8;
+  background-color: var(--el-water);
 }
-.water .elementText { color: #2b6cb0; }
+.water .elementText { color: var(--el-water-ink); }
 
 .twelveGodsSection {
   display: flex;
@@ -144,7 +145,7 @@
 
 .twelveGodsLabel {
   font-weight: 700;
-  color: #333;
+  color: var(--text);
 }
 
 .tagsContainer {
@@ -154,8 +155,8 @@
 }
 
 .blueTag {
-  background-color: #ebf8ff;
-  color: #3182ce;
+  background-color: var(--sec-tint);
+  color: var(--sec);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.85rem;

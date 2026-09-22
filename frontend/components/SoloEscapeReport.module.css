@@ -19,9 +19,9 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: radial-gradient(circle, hsl(320, 90%, 65%), hsl(280, 80%, 50%));
+  background: radial-gradient(circle, color-mix(in srgb, var(--sec) 75%, white), var(--sec));
   animation: pulse 1.8s ease-in-out infinite;
-  box-shadow: 0 0 40px hsl(300, 80%, 60%);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--sec) 45%, transparent);
 }
 
 @keyframes pulse {
@@ -31,13 +31,13 @@
 
 .loadingText {
   font-size: 1.2rem;
-  color: var(--sec, #c026d3);
+  color: var(--sec);
   font-weight: 600;
 }
 
 .loadingSubtext {
   font-size: 0.875rem;
-  color: var(--text-secondary, hsl(0, 0%, 55%));
+  color: var(--text-mute);
 }
 
 /* ── 히어로 배너 ── */
@@ -45,8 +45,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  background: linear-gradient(135deg, hsl(330, 100%, 97%) 0%, hsl(280, 100%, 97%) 100%);
-  border: 1px solid hsl(320, 60%, 88%);
+  background: var(--sec-tint);
+  border: 1px solid color-mix(in srgb, var(--sec) 30%, transparent);
   padding: 2.5rem 2rem;
   text-align: center;
 }
@@ -58,7 +58,7 @@
   transform: translateX(-50%);
   width: 300px;
   height: 200px;
-  background: radial-gradient(ellipse, hsl(320, 80%, 60%, 0.14), transparent 70%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--sec) 22%, transparent), transparent 70%);
   pointer-events: none;
 }
 
@@ -77,7 +77,7 @@
 .heroTitle {
   font-size: 1.75rem;
   font-weight: 800;
-  background: linear-gradient(90deg, hsl(340, 80%, 45%), hsl(290, 70%, 45%));
+  background: linear-gradient(90deg, var(--sec), color-mix(in srgb, var(--sec) 60%, var(--text)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -85,18 +85,18 @@
 }
 
 .heroSubtitle {
-  color: hsl(320, 25%, 45%);
+  color: var(--text-mute);
   font-size: 0.9rem;
   margin: 0;
 }
 
 /* ── 섹션 공통 ── */
 .section {
-  background: #fff;
-  border: 1px solid var(--line, #e6e8eb);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
 }
 
 .sectionHeader {
@@ -113,19 +113,19 @@
 .sectionTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--sec, #c026d3);
+  color: var(--sec);
   margin: 0;
   flex: 1;
 }
 
 .probabilityBadge {
-  background: linear-gradient(135deg, hsl(320, 80%, 40%), hsl(280, 70%, 40%));
-  color: white;
+  background: var(--sec);
+  color: var(--on-accent);
   padding: 4px 14px;
   border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 700;
-  box-shadow: 0 0 12px hsl(300, 70%, 40%, 0.5);
+  box-shadow: none;
 }
 
 /* ── 만남 예측 그리드 ── */
@@ -136,15 +136,15 @@
 }
 
 .meetingCard {
-  background: #fff5f9;
-  border: 1px solid #f9cede;
+  background: var(--sec-tint);
+  border: 1px solid color-mix(in srgb, var(--sec) 25%, transparent);
   border-radius: 12px;
   padding: 1rem 1.25rem;
 }
 
 .meetingLabel {
   font-size: 0.75rem;
-  color: hsl(320, 45%, 45%);
+  color: var(--sec);
   font-weight: 600;
   display: block;
   margin-bottom: 0.4rem;
@@ -154,7 +154,7 @@
 
 .meetingValue {
   font-size: 0.95rem;
-  color: var(--ink-soft, #4a5568);
+  color: var(--text-soft);
   margin: 0;
   line-height: 1.5;
 }
@@ -164,8 +164,8 @@
   flex-shrink: 0;
   width: 180px;
   min-height: 160px;
-  background: linear-gradient(145deg, hsl(330, 100%, 97%), hsl(280, 100%, 97%));
-  border: 1px solid hsl(320, 45%, 88%);
+  background: var(--sec-tint);
+  border: 1px solid color-mix(in srgb, var(--sec) 25%, transparent);
   border-radius: 16px;
   padding: 1.25rem 1rem;
   display: flex;
@@ -188,7 +188,7 @@
 .appearanceLabel {
   font-size: 0.7rem;
   font-weight: 700;
-  color: hsl(320, 45%, 45%);
+  color: var(--sec);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
@@ -196,7 +196,7 @@
 
 .appearanceDesc {
   font-size: 0.82rem;
-  color: var(--ink-soft, #4a5568);
+  color: var(--text-soft);
   line-height: 1.65;
   margin: 0;
   text-align: left;
@@ -217,8 +217,8 @@
 
 .personBadge {
   background: var(--sec-tint, #fbeafe);
-  border: 1px solid hsl(320, 60%, 88%);
-  color: var(--sec, #c026d3);
+  border: 1px solid color-mix(in srgb, var(--sec) 30%, transparent);
+  color: var(--sec);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -226,7 +226,7 @@
 }
 
 .personInfoBlock {
-  background: #f8f9fb;
+  background: var(--bg-sunken);
   border-radius: 10px;
   padding: 0.75rem 1rem;
 }
@@ -234,7 +234,7 @@
 .personInfoLabel {
   font-size: 0.72rem;
   font-weight: 700;
-  color: hsl(320, 45%, 45%);
+  color: var(--sec);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0 0 0.35rem;
@@ -242,7 +242,7 @@
 
 .personInfoText {
   font-size: 0.9rem;
-  color: var(--ink-soft, #4a5568);
+  color: var(--text-soft);
   margin: 0;
   line-height: 1.6;
 }
@@ -258,15 +258,15 @@
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  background: #fff8f3;
-  border: 1px solid #fbdcc4;
+  background: var(--note-bg);
+  border: 1px solid var(--note-line);
   border-radius: 12px;
   padding: 1rem 1.25rem;
 }
 
 .scriptBackup {
-  background: #fffbeb;
-  border-color: #fae9b0;
+  background: var(--alt-bg);
+  border-color: var(--alt-line);
 }
 
 .scriptStepNum {
@@ -274,19 +274,19 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, hsl(330, 80%, 45%), hsl(280, 70%, 45%));
-  color: white;
+  background: var(--sec);
+  color: var(--on-accent);
   font-size: 0.85rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 10px hsl(300, 70%, 45%, 0.4);
+  box-shadow: none;
 }
 
 .scriptBackup .scriptStepNum {
-  background: linear-gradient(135deg, hsl(40, 80%, 45%), hsl(20, 70%, 45%));
-  box-shadow: 0 0 10px hsl(30, 70%, 45%, 0.4);
+  background: var(--note-text);
+  box-shadow: none;
 }
 
 .scriptContent {
@@ -296,19 +296,19 @@
 .scriptLabel {
   font-size: 0.72rem;
   font-weight: 700;
-  color: hsl(25, 70%, 40%);
+  color: var(--note-text);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0 0 0.4rem;
 }
 
 .scriptBackup .scriptLabel {
-  color: hsl(38, 75%, 35%);
+  color: var(--alt-text);
 }
 
 .scriptLine {
   font-size: 0.925rem;
-  color: var(--ink-soft, #4a5568);
+  color: var(--text-soft);
   margin: 0;
   line-height: 1.6;
 }
@@ -316,7 +316,7 @@
 .scriptArrow {
   text-align: center;
   font-size: 1.1rem;
-  color: hsl(320, 35%, 68%);
+  color: color-mix(in srgb, var(--sec) 55%, transparent);
   padding: 0 0 0 1rem;
 }
 
@@ -325,8 +325,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  background: linear-gradient(135deg, hsl(350, 100%, 97%), hsl(300, 100%, 97%));
-  border: 1px solid hsl(350, 60%, 89%);
+  background: var(--sec-tint);
+  border: 1px solid color-mix(in srgb, var(--sec) 28%, transparent);
   padding: 2rem 1.75rem;
 }
 
@@ -336,7 +336,7 @@
   right: -20px;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, hsl(350, 80%, 60%, 0.12), transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--sec) 18%, transparent), transparent 70%);
   pointer-events: none;
 }
 
@@ -348,7 +348,7 @@
 
 .motivationText {
   font-size: 1rem;
-  color: var(--ink-soft, #4a5568);
+  color: var(--text-soft);
   margin: 0 0 1rem;
   line-height: 1.75;
   font-style: italic;
@@ -360,7 +360,7 @@
 
 .motivationSigned {
   font-size: 0.85rem;
-  color: hsl(350, 55%, 45%);
+  color: var(--sec);
   font-weight: 600;
 }
 

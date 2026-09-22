@@ -54,7 +54,7 @@ function ResultView() {
       <div style={{ padding: '2rem 1rem', maxWidth: '720px', margin: '0 auto' }}>
         <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
           <h1 style={{ fontSize: '2rem', margin: '0 0 8px', letterSpacing: '-0.02em' }}>심화 분석 결과</h1>
-          <p style={{ color: 'var(--ink-mute)', margin: 0 }}>{personName}님의 명식과 12궁 명반</p>
+          <p style={{ color: 'var(--text-mute)', margin: 0 }}>{personName}님의 명식과 12궁 명반</p>
         </header>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

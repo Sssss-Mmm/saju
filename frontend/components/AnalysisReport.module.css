@@ -5,15 +5,15 @@
 }
 
 .chatBubbleContainer {
-  background-color: #f8fbff;
+  background-color: var(--bg-elev);
   border-radius: 16px;
-  border-left: 4px solid #3182ce;
+  border-left: 4px solid var(--sec);
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
 }
 
 .chatBubble {
-  color: #2d3748;
+  color: var(--text-soft);
 }
 
 .chatHeader {
@@ -30,13 +30,13 @@
 .sender {
   font-weight: 800;
   font-size: 1.1rem;
-  color: #1a202c;
+  color: var(--text);
 }
 
 .chatContent {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #4a5568;
+  color: var(--text-soft);
 }
 
 .chatContent p {
@@ -49,17 +49,17 @@
 }
 
 .chatContent strong {
-  color: #2b6cb0;
+  color: var(--sec);
   font-weight: 800;
-  background: rgba(43, 108, 176, 0.05);
+  background: var(--sec-tint);
   padding: 0 4px;
   border-radius: 4px;
 }
 
 .typingIndicator {
-  background-color: #f7f8fa;
+  background-color: var(--bg-sunken);
   border-radius: 12px;
-  border: 1px solid var(--line, #e6e8eb);
+  border: 1px solid var(--line);
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -93,7 +93,7 @@
 
 .typingIndicator {
   font-style: italic;
-  color: #888;
+  color: var(--text-mute);
   animation: pulse 1.5s infinite;
 }
 
@@ -104,20 +104,20 @@
 }
 
 .userBubbleContainer {
-  background-color: #f0f4f8;
+  background-color: var(--bg-sunken);
   border-radius: 16px;
-  border-right: 4px solid #4a5568;
+  border-right: 4px solid var(--line-strong);
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
   margin-left: 20%;
 }
 
 .aiBubbleContainer {
-  background-color: #f8fbff;
+  background-color: var(--bg-elev);
   border-radius: 16px;
-  border-left: 4px solid #3182ce;
+  border-left: 4px solid var(--sec);
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
   margin-right: 20%;
 }
 
@@ -131,15 +131,16 @@
   flex: 1;
   padding: 12px 16px;
   border-radius: 20px;
-  border: 1px solid #cbd5e0;
+  border: 1px solid var(--line);
   outline: none;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
+  background: var(--bg-input);
 }
 
 .qnaSubmitBtn {
-  background: var(--glow-primary, #3182ce);
-  color: white;
+  background: var(--sec);
+  color: var(--on-accent);
   border: none;
   border-radius: 20px;
   padding: 0 20px;
@@ -148,7 +149,7 @@
   transition: all 0.2s;
 }
 .qnaSubmitBtn:disabled {
-  background: #cbd5e0;
+  background: var(--line-strong);
   cursor: not-allowed;
 }
 
@@ -173,9 +174,9 @@
 .tab {
   padding: 9px 16px;
   border-radius: 999px;
-  border: 1px solid var(--line, #e6e8eb);
-  background: #fff;
-  color: var(--ink-soft, #4a5568);
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+  color: var(--text-soft);
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -184,38 +185,47 @@
 }
 
 .tab:hover {
-  background: var(--sec-tint, #eef2ff);
-  color: var(--sec, #4f46e5);
+  background: var(--sec-tint);
+  color: var(--sec);
   box-shadow: none;
   transform: none;
 }
 
 .tabActive,
 .tabActive:hover {
-  background: var(--sec, #4f46e5);
-  border-color: var(--sec, #4f46e5);
-  color: #fff;
+  background: var(--sec);
+  border-color: var(--sec);
+  color: var(--on-accent);
 }
 
 /* ---------- 리포트 본문 카드 ---------- */
 .reportCard {
-  background: #fff;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 28px 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
 }
 
 .reportCard .chatHeader {
   padding-bottom: 14px;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--line, #e6e8eb);
+  border-bottom: 1px solid var(--line);
 }
 
-/* ---------- 하단 요약 카드 ---------- */
+/* ---------- 하단 요약 카드 ----------
+   라이트에선 어두운 대비 블록, 다크에선 테두리로 강조를 준다. */
 .darkActionCard {
   background: #1a202c;
+  border: 1px solid transparent;
   border-radius: 16px;
   padding: 24px;
+}
+
+:root[data-theme="dark"] .darkActionCard { border-color: #ecc94b; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .darkActionCard { border-color: #ecc94b; }
 }
 
 @media (max-width: 600px) {

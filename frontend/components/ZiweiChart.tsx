@@ -61,7 +61,7 @@ export default function ZiweiChart({ data }: { data: any }) {
                   border: isSelected ? '2px solid var(--glow-gold)' : '1px solid var(--border-color)',
                   borderRadius: '8px',
                   padding: '8px',
-                  background: isSelected ? 'var(--sec-tint)' : '#fafbfc',
+                  background: isSelected ? 'var(--sec-tint)' : 'var(--bg-sunken)',
                   display: 'flex',
                   flexDirection: 'column',
                   minWidth: 0,
